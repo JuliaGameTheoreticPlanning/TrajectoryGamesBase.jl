@@ -64,19 +64,3 @@ end
 function num_players(dynamics::ProductDynamics)
     length(dynamics.subsystems)
 end
-
-"""
-Returns the indices for a given `player` index into the joint `x`.
-"""
-function state_indices(dynamics::ProductDynamics, player::Integer)
-    #    start_idx = sum(1:(player - 1); init = 0) do ii
-    #        state_dim(dynamics.subsystems[ii])
-    #    end + 1
-    # TODO: Fix Zygote diff issues
-    if player == 1
-        start_idx = 1
-    elseif player == 2
-        start_idx = 5
-    end
-    start_idx:(start_idx + state_dim(dynamics.subsystems[player]) - 1)
-end
