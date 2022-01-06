@@ -1,9 +1,7 @@
 abstract type AbstractEnvironment end
 
-# TODO don't disptach on solver here. All of them should be able to use the same representation.
-# Potentially, even all of themcould use Symbolics.jl
-# TODO: add docs
-function setup_environmental_constraints end
+
+function g_position end
 
 """
     geometry(env::AbstractEnvironment)

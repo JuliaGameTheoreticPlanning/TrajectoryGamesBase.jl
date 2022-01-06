@@ -22,6 +22,12 @@ function state_dim end
 "Number of control inputs."
 function control_dim end
 
+"Returns a tuple `(lb, ub)` of the lower and upper bound of the state vector."
+function state_bounds end
+
+"Returns a tuple `(lb, ub)` of the lower and upper bound of the control vector."
+function control_bounds end
+
 #=== Product Dynamics ===#
 
 """
@@ -35,10 +41,29 @@ function (dynamics::ProductDynamics)(x, us, t)
     mortar([sub(x̂, u, t) for (sub, x̂, u) in zip(dynamics.subsystems, blocks(x), us)])
 end
 
-state_dim(dynamics::ProductDynamics) = sum(state_dim(sub) for sub in dynamics.subsystems)
-control_dim(dynamics::ProductDynamics, player) = control_dim(dynamics.subsystems[player])
-control_dim(dynamics::ProductDynamics) = sum(control_dim(sub) for sub in dynamics.subsystems)
-num_players(dynamics::ProductDynamics) = length(dynamics.subsystems)
+function state_dim(dynamics::ProductDynamics)
+    sum(state_dim(sub) for sub in dynamics.subsystems)
+end
+
+function control_dim(dynamics::ProductDynamics, player)
+    control_dim(dynamics.subsystems[player])
+end
+
+function control_dim(dynamics::ProductDynamics)
+    sum(control_dim(sub) for sub in dynamics.subsystems)
+end
+
+function state_bounds(dynamics::ProductDynamics)
+    mortar([state_bounds(sub) for sub in dynamics.subsystems])
+end
+
+function control_bounds(dynamics::ProductDynamics)
+    mortar([control_bounds(sub) for sub in dynamics.subsystems])
+end
+
+function num_players(dynamics::ProductDynamics)
+    length(dynamics.subsystems)
+end
 
 """
 Returns the indices for a given `player` index into the joint `x`.
