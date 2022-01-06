@@ -1,7 +1,7 @@
 abstract type AbstractEnvironment end
 
 
-function g_position end
+function to_sublevelset end
 
 """
     geometry(env::AbstractEnvironment)
