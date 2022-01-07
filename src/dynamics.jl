@@ -2,7 +2,7 @@
 abstract type AbstractSinglePlayerDynamics end
 
 """
-May be called as dynamics(state, strategies).
+    dynamics(state, strategies[, t]).
 
 Computes the next state for the (potentially non-deterministic) `strategies` applied to the \
 multi-player `dynamics`. Some of the `strategies` may be non-deterministic. Hence, the call to this \
@@ -37,7 +37,7 @@ Base.@kwdef struct ProductDynamics{T} <: AbstractMultiPlayerDynamics
     subsystems::T
 end
 
-function (dynamics::ProductDynamics)(x, us, t)
+function (dynamics::ProductDynamics)(x, us, t = nothing)
     mortar([sub(x̂, u, t) for (sub, x̂, u) in zip(dynamics.subsystems, blocks(x), us)])
 end
 
