@@ -1,18 +1,15 @@
-# TODO: not sure if this abstract type is really needed
-abstract type AbstractSinglePlayerDynamics end
-
 """
     dynamics(state, actions[, t]).
 
 Computes the next state for a collecition of player `actions` applied to the multi-player \
 `dynamics`.
 """
-abstract type AbstractMultiPlayerDynamics end
+abstract type AbstractDynamics end
 
-"""
-The number of players in the dynamical system.
-"""
-function num_players end
+# """
+# The number of players in the dynamical system.
+# """
+# function num_players end
 
 "Number of states."
 function state_dim end
@@ -29,9 +26,9 @@ function control_bounds end
 #=== Product Dynamics ===#
 
 """
-AbstractMultiPlayerDynamics which are the Cartesian product of several single player systems.
+AbstractDynamics which are the Cartesian product of several single player systems.
 """
-Base.@kwdef struct ProductDynamics{T} <: AbstractMultiPlayerDynamics
+Base.@kwdef struct ProductDynamics{T} <: AbstractDynamics
     subsystems::T
 end
 
@@ -43,12 +40,8 @@ function state_dim(dynamics::ProductDynamics)
     sum(state_dim(sub) for sub in dynamics.subsystems)
 end
 
-function control_dim(dynamics::ProductDynamics, player)
-    control_dim(dynamics.subsystems[player])
-end
-
-function control_dim(dynamics::ProductDynamics)
-    sum(control_dim(sub) for sub in dynamics.subsystems)
+function control_dim(dynamcs::ProductDynamics)
+    sum(control_dim(sub) for sub in dynamcs.subsystems)
 end
 
 function state_bounds(dynamics::ProductDynamics)
@@ -57,8 +50,4 @@ end
 
 function control_bounds(dynamics::ProductDynamics)
     mortar([control_bounds(sub) for sub in dynamics.subsystems])
-end
-
-function num_players(dynamics::ProductDynamics)
-    length(dynamics.subsystems)
 end

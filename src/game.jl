@@ -1,6 +1,6 @@
 Base.@kwdef struct TrajectoryGame{
     TC<:AbstractCostStructure,
-    TD<:AbstractMultiPlayerDynamics,
+    TD<:AbstractDynamics,
     TE<:AbstractEnvironment,
     TH,
 }
