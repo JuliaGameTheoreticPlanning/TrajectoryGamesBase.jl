@@ -1,6 +1,15 @@
 """
-    visualize_strategy!(fig, γ, player_color)
+    strategy(state)
 
-Visualize the strategy `γ` on a Makie canvas `fig` with a given `player_color`.
+Computes an `action` for this player for the given `state`. Note that the `strategy` may be
+non-deterministic. Hence, unless it is seeded to the same pseudo-random state, it subsequent calls
+of `strategy` may yield different actions.
+"""
+abstract type AbstractStrategy end
+
+"""
+    visualize_strategy!(fig, strategy, player_color)
+
+Visualize the strategy `strategy` on a Makie canvas `fig` with a given `player_color`.
 """
 function visualize_strategy! end

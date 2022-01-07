@@ -2,12 +2,10 @@
 abstract type AbstractSinglePlayerDynamics end
 
 """
-    dynamics(state, strategies[, t]).
+    dynamics(state, actions[, t]).
 
-Computes the next state for the (potentially non-deterministic) `strategies` applied to the \
-multi-player `dynamics`. Some of the `strategies` may be non-deterministic. Hence, the call to this \
-function may modify `strategy` and subsequent calls of this function on the same `state` may thus \
-yield different next states unless the `strategy` is seeded to the same state before each call.
+Computes the next state for a collecition of player `actions` applied to the multi-player \
+`dynamics`.
 """
 abstract type AbstractMultiPlayerDynamics end
 
