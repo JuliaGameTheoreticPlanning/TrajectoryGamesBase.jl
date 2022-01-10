@@ -5,6 +5,8 @@ version = "0.1.0"
 
 [deps]
 BlockArrays = "8e7c35d0-a365-5155-bbbb-fb81a777f24e"
+InfiniteArrays = "4858937d-0d70-526a-a4dd-2d5cb5dd786c"
+SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
 [compat]
 julia = "1.7"
