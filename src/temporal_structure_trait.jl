@@ -1,5 +1,5 @@
 abstract type AbstractTemporalStructure end
-struct TimeVaring <: AbstractTemporalStructure end
+struct TimeVarying <: AbstractTemporalStructure end
 struct TimeInvariant <: AbstractTemporalStructure end
 
 """
