@@ -1,6 +1,6 @@
 module TrajectoryGamesBase
 
-using BlockArrays: Block, blocks, mortar
+using BlockArrays: BlockArray, Block, blocks, mortar, blocksizes, blocksize
 
 include("temporal_structure_trait.jl")
 
