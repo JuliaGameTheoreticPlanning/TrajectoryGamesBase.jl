@@ -1,7 +1,7 @@
 Base.@kwdef struct TrajectoryGame{
     TCS<:AbstractCostStructure,
-    TC<:TrajectoryGameCost{TCS},
     TD<:AbstractDynamics,
+    TC<:TrajectoryGameCost{TCS},
     TE<:AbstractEnvironment
 }
     "A cost structure that holds information about the payoff structure."
