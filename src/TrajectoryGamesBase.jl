@@ -1,6 +1,6 @@
 module TrajectoryGamesBase
 
-using BlockArrays: BlockArray, Block,blocks, mortar, blocksizes, blocksize
+using BlockArrays: AbstractBlockArray, BlockArray, Block, blocks, mortar, blocksizes, blocksize
 using InfiniteArrays: Fill, ∞
 using SparseArrays: blockdiag, sparse
 

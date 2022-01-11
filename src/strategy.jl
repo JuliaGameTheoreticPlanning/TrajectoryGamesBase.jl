@@ -7,8 +7,6 @@ calls of `strategy` may yield different actions.
 """
 abstract type AbstractStrategy end
 
-(s::AbstractStrategy)(x, ::Nothing) = s(x)
-
 """
     visualize_strategy!(fig, strategy, player_color)
 
