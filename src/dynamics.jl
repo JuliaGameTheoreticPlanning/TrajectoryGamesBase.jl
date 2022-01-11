@@ -43,6 +43,3 @@ Linearize about a trajectory `(x, u)` with `x` and and `u` layed out as `Vector{
 indexed).
 """
 function linearize end
-
-include("product_dynamics.jl")
-include("linear_dynamics.jl")
