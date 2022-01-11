@@ -25,8 +25,8 @@ struct TrajectoryGameCost{TC<:AbstractCostStructure,TS,TR}
             `stage_cost` and `reducer` instead",
         )
 
-        stage_costs = (stage_cost, (-) ∘ stage_cost)
-        reducers = (reducer, reducer)
+        stage_costs = [stage_cost, (-) ∘ stage_cost]
+        reducers = [reducer, reducer]
         new{ZeroSumCostStructure,typeof(stage_costs),typeof(reducers)}(
             cost_structure,
             stage_costs,
