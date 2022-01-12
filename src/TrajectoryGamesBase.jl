@@ -9,6 +9,7 @@ include("temporal_structure_trait.jl")
 include("dynamics.jl")
 include("product_dynamics.jl")
 include("linear_dynamics.jl")
+include("dynamics_utils.jl")
 
 include("costs.jl")
 include("environment.jl")
