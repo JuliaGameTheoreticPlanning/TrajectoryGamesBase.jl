@@ -3,15 +3,15 @@ Simulates a `strategy` by evolving the `dynamics` for `T` time steps starting fr
 applying the inputs dictated by the strategy.
 """
 function rollout(dynamics, strategy, x1, T = horizon(dynamics))
-    x = sizehint!([x1], T)
-    u = sizehint!([strategy(x1, 1)], T)
+    xs = sizehint!([x1], T)
+    us = sizehint!([strategy(x1, 1)], T)
 
     for tt in 1:(T - 1)
-        xp = dynamics(x[tt], u[tt], tt)
-        push!(x, xp)
-        up = strategy(xp, tt)
-        push!(u, up)
+        xp = dynamics(xs[tt], us[tt], tt)
+        push!(xs, xp)
+        up = strategy(xp, tt + 1)
+        push!(us, up)
     end
 
-    x, u
+    xs, us
 end
