@@ -12,5 +12,5 @@ Base.@kwdef struct TrajectoryGame{
 end
 
 function num_players(g::TrajectoryGame)
-    length(g.cost.reducers)
+    num_players(g.dynamics)
 end

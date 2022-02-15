@@ -6,11 +6,6 @@ Computes the next state for a collecition of player `actions` applied to the mul
 """
 abstract type AbstractDynamics end
 
-# """
-# The number of players in the dynamical system.
-# """
-# function num_players end
-
 "Number of states."
 function state_dim end
 
