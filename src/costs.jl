@@ -10,7 +10,7 @@ struct ZeroSumTrajectoryGameCost{TS,TR} <: AbstractTrajectoryGameCost
     reducer::TR
 end
 
-function (cost::ZeroSumTrajectoryGameCost)(player_i, xs, us)
+function (cost::ZeroSumTrajectoryGameCost)(xs, us)
     ts = eachindex(xs)
     Iterators.map(xs, us, ts) do x, u, t
         cost.stage_cost(x, u, t)
