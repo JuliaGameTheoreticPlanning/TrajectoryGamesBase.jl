@@ -4,12 +4,12 @@ applying the inputs dictated by the strategy.
 
 Kwargs:
 
-- `getinfo` is a callback that can be passed to extract additional info from the strategy `γ` for
+- `getinfo` is a callback `(γ, x, t) -> info` that can be passed to extract additional info from the strategy `γ` for
 each rollout state `x` and time `t`.
 
 Returns a tuple of collections over states `xs`, inputs `us`, and extra information `infos`.
 """
-function rollout(dynamics, strategy, x1, T = horizon(dynamics); getinfo = (γ, x, t)- > nothing)
+function rollout(dynamics, strategy, x1, T = horizon(dynamics); getinfo = (γ, x, t) -> nothing)
     xs = sizehint!([x1], T)
     us = sizehint!([strategy(x1, 1)], T)
     infos = sizehint!([getinfo(strategy, x1, 1)], T)
