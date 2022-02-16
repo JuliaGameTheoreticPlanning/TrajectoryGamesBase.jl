@@ -18,7 +18,7 @@ include("environment.jl")
 include("game.jl")
 
 include("strategy.jl")
-include("joint_strategy.jl")
+include("strategy_utils.jl")
 
 include("solver.jl")
 
