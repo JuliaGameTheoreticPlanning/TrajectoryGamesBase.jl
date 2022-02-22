@@ -13,7 +13,7 @@ Base.@kwdef struct ProductDynamics{T} <: AbstractDynamics
 end
 
 function (dynamics::ProductDynamics)(x::AbstractBlockArray, u::AbstractBlockArray, t = nothing)
-    mortar([sub(x̂, u, t) for (sub, x̂, u) in zip(dynamics.subsystems, blocks(x), block(u))])
+    mortar([sub(x̂, u, t) for (sub, x̂, u) in zip(dynamics.subsystems, blocks(x), blocks(u))])
 end
 
 function state_dim(dynamics::ProductDynamics)
