@@ -1,9 +1,9 @@
 Base.@kwdef struct TrajectoryGame{
     TD<:AbstractDynamics,
-    TC<:AbstractTrajectoryGameCost,
+    TC,
     TE<:AbstractEnvironment,
 }
-    "A cost structure that holds information about the payoff structure."
+    "A cost function taking a trajectory pairing (xs, us) in Blocks and gives the cost per player in a tuple."
     cost::TC
     "An object that describes the dynamics of this trajectory game"
     dynamics::TD
