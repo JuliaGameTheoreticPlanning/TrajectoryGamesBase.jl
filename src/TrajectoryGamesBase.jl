@@ -1,3 +1,5 @@
+__precompile__(false)
+
 module TrajectoryGamesBase
 
 using BlockArrays: AbstractBlockArray, BlockArray, Block, blocks, mortar, blocksizes, blocksize
