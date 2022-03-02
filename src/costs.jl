@@ -12,10 +12,22 @@ end
 
 function (cost::ZeroSumTrajectoryGameCost)(xs, us)
     ts = eachindex(xs)
-    Iterators.map(xs, us, ts) do x, u, t
+    reduced = Iterators.map(xs, us, ts) do x, u, t
         cost.stage_cost(x, u, t)
     end |> cost.reducer
+    (reduced, -reduced)
 end
 
-# TODO: introduce cost for geneal-sum games
-struct GeneralSumTrajectoryGameCost{TS,TR} <: AbstractTrajectoryGameCost end
+struct GeneralSumTrajectoryGameCost{TS,TR} <: AbstractTrajectoryGameCost
+    stage_costs::TS
+    reducers::TR
+end
+
+function (cost::GeneralSumTrajectoryGameCost)(xs, us)
+    ts = eachindex(xs)
+    map(cost.reducers, cost.stage_costs) do reducer, stage_cost
+        Iterators.map(xs, us, ts) do x, u, t
+            stage_cost(x, u, t)
+        end |> reducer
+    end
+end
