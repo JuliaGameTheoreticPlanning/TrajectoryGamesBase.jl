@@ -1,6 +1,12 @@
 #== Cost structure traints ==#
-struct ZeroSumCostStructure end
-struct GeneralSumCostStructure end
+"""
+An additional structure hint for further optimization. For example if `_f` has zero-sum cost
+structure (i.e. we have that `c1, c2 = cs` and `c1 == -c2` for arbitray inputs to `_f`) then we
+can pass the `ZeroSumCostStructure` trait type here.
+"""
+abstract type AbstractCostStructure end
+struct ZeroSumCostStructure <: AbstractCostStructure end
+struct GeneralSumCostStructure <: AbstractCostStructure end
 
 struct TrajectoryGameCost{T1,T2}
     """
@@ -9,57 +15,36 @@ struct TrajectoryGameCost{T1,T2}
     """
     _f::T1
     """
-    An additional structure hint for further optimization. For example if `_f` has zero-sum cost
-    structure (i.e. we have that `c1, c2 = cs` and `c1 == -c2` for arbitray inputs to `_f`) then we
-    can pass the `ZeroSumCostStructure` trait type here.
+    An aditional structure hint for further optimization. See the docstring of
+    `AbstractCostStructure` for further details.
     """
     structure::T2
     # Note, an additional field here could later indicate time-separability
 end
-
 function (c::TrajectoryGameCost)(args...; kwargs...)
     c._f(args...; kwargs...)
 end
 
-function getproperty(c::TrajectoryGameCost, name::Symbol)
-    if name === :stage_cost
-        return c._f.stage_cost
-    elseif name === :reducer
-        return c._f.reducer
-    end
-
-    getfield(c, name)
+struct TimeSeparableTrajectoryGameCost{T1,T2,T3}
+    """
+    A function `(x, u, t) -> sc` which maps the joint state `x` and input `u` for a given time step
+    `t` to a tuple of scalar costs `sc` for each player at that time.
+    """
+    stage_cost::T1
+    """
+    A function `(scs -> cs)` that reduces a sequence of stage cost tuples to a tuple of costs `cs`
+    for all players. In the simplest case, this reduction operation may simply be the sum of elemnts
+    (e.g. `reducer = scs -> reduce(.+, scs)`).
+    """
+    reducer::T2
+    """
+    An aditional structure hint for further optimization. See the docstring of
+    `AbstractCostStructure` for further details.
+    """
+    structure::T3
 end
 
-"""
-Constructs a cost function for a game with zero-sum time-separable cost struture.
-Requires that only a single stage_cost and reducer is passed for construction.
-Returns a cost function evaluating a trajectory pairing for both players.
-"""
-function zero_sum_time_separable_trajectory_game_cost(stage_cost, reducer)
-    function cost(xs, us)
-        ts = eachindex(xs)
-        reduced = Iterators.map(xs, us, ts) do x, u, t
-            stage_cost(x, u, t)
-        end |> reducer
-        (reduced, -reduced)
-    end
-    TrajectoryGameCost(cost, ZeroSumCostStructure())
-end
-
-"""
-Constructs a cost function for a game with general-sum time-separable cost struture.
-Requires that a stage_cost and reducer is passed for each player.
-Returns a cost function evaluating a trajectory pairing for both players.
-"""
-function general_sum_time_separable_trajectory_game_cost(stage_costs, reducers)
-    function cost(xs, us)
-        ts = eachindex(xs)
-        map(reducers, stage_costs) do reducer, stage_cost
-            Iterators.map(xs, us, ts) do x, u, t
-                stage_cost(x, u, t)
-            end |> reducer
-        end
-    end
-    TrajectoryGameCost(cost, GeneralSumCostStructure())
+function (c::TimeSeparableTrajectoryGameCost)(xs, us)
+    ts = Iterators.eachindex(xs)
+    Iterators.map((x, u, t) -> c.stage_cost(x, u,t), xs, us, ts) |> c.reducer
 end
