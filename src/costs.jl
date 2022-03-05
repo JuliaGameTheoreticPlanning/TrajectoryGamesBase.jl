@@ -21,6 +21,7 @@ struct TrajectoryGameCost{T1,T2}
     structure::T2
     # Note, an additional field here could later indicate time-separability
 end
+
 function (c::TrajectoryGameCost)(args...; kwargs...)
     c._f(args...; kwargs...)
 end
@@ -46,5 +47,5 @@ end
 
 function (c::TimeSeparableTrajectoryGameCost)(xs, us)
     ts = Iterators.eachindex(xs)
-    Iterators.map((x, u, t) -> c.stage_cost(x, u,t), xs, us, ts) |> c.reducer
+    Iterators.map((x, u, t) -> c.stage_cost(x, u, t), xs, us, ts) |> c.reducer
 end
