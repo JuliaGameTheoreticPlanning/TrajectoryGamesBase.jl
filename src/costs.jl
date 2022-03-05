@@ -1,3 +1,26 @@
+#== Cost structure traints ==#
+struct ZeroSumCostStructure end
+struct GeneralSumCostStructure end
+
+struct TrajectoryGameCost{T1,T2}
+    """
+    A function `(xs, us) -> cs` that maps a sequence of joint states `xs` and inputs `us` to a tuple
+    of scalar costs per player.
+    """
+    _f::T1
+    """
+    An additional structure hint for further optimization. For example if `_f` has zero-sum cost
+    structure (i.e. we have that `c1, c2 = cs` and `c1 == -c2` for arbitray inputs to `_f`) then we
+    can pass the `ZeroSumCostStructure` trait type here.
+    """
+    structure::T2
+    # Note, an additional field here could later indicate time-separability
+end
+
+function (c::TrajectoryGameCost)(args...; kwargs...)
+    c._f(args...; kwargs...)
+end
+
 
 """
 Constructs a cost function for a game with zero-sum time-separable cost struture.
@@ -12,7 +35,7 @@ function zero_sum_time_separable_trajectory_game_cost(stage_cost, reducer)
         end |> reducer
         (reduced, -reduced)
     end
-    cost
+    TrajectoryGameCost(cost, ZeroSumCostStructure())
 end
 
 """
@@ -29,5 +52,5 @@ function general_sum_time_separable_trajectory_game_cost(stage_costs, reducers)
             end |> reducer
         end
     end
-    cost
+    TrajectoryGameCost(cost, GeneralSumCostStructure())
 end
