@@ -21,6 +21,16 @@ function (c::TrajectoryGameCost)(args...; kwargs...)
     c._f(args...; kwargs...)
 end
 
+function getproperty(c::TrajectoryGameCost, name::Symbol)
+    if name === :stage_cost
+        return c._f.stage_cost
+    elseif name === :reducer
+        return c._f.reducer
+    end
+
+    getfield(c, name)
+end
+
 """
 Constructs a cost function for a game with zero-sum time-separable cost struture.
 Requires that only a single stage_cost and reducer is passed for construction.
