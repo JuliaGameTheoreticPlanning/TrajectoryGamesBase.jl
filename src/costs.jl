@@ -21,7 +21,6 @@ function (c::TrajectoryGameCost)(args...; kwargs...)
     c._f(args...; kwargs...)
 end
 
-
 """
 Constructs a cost function for a game with zero-sum time-separable cost struture.
 Requires that only a single stage_cost and reducer is passed for construction.
