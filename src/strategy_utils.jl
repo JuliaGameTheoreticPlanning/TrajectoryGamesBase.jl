@@ -14,30 +14,28 @@ end
 
 #== RecedingHorizonStrategy ==#
 
-Base.@kwdef struct RecedingHorizonStrategy{TS,TG,TSK}
+Base.@kwdef mutable struct RecedingHorizonStrategy{TS,TG,TSK}
     solver::TS
     game::TG
     solve_kwargs::TSK = (;)
-    receding_horizon_strategy::Ref{Any} = Ref{Any}()
-    time_last_updated::Ref{Int} = Ref{Int}(0)
+    receding_horizon_strategy::Any = nothing
+    time_last_updated::Int = 0
     turn_length::Int = 10
 end
 
 function (strategy::RecedingHorizonStrategy)(state, time)
-    plan_exists = isdefined(strategy.receding_horizon_strategy, 1)
+    plan_exists = !isnothing(strategy.receding_horizon_strategy)
     plan_is_still_valid = (
-        strategy.time_last_updated[] <=
-        time <=
-        strategy.time_last_updated[] + strategy.turn_length - 1
+        strategy.time_last_updated <= time <= strategy.time_last_updated + strategy.turn_length - 1
     )
 
     update_plan = !plan_exists || !plan_is_still_valid
     if update_plan
-        strategy.receding_horizon_strategy[] =
+        strategy.receding_horizon_strategy =
             solve_trajectory_game!(strategy.solver, strategy.game, state; strategy.solve_kwargs...)
-        strategy.time_last_updated[] = time
+        strategy.time_last_updated = time
     end
 
-    time_along_plan = time - strategy.time_last_updated[] + 1
-    strategy.receding_horizon_strategy[](state, time_along_plan)
+    time_along_plan = time - strategy.time_last_updated + 1
+    strategy.receding_horizon_strategy(state, time_along_plan)
 end
