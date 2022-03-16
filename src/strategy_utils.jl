@@ -25,9 +25,8 @@ end
 
 function (strategy::RecedingHorizonStrategy)(state, time)
     plan_exists = !isnothing(strategy.receding_horizon_strategy)
-    plan_is_still_valid = (
-        strategy.time_last_updated <= time <= strategy.time_last_updated + strategy.turn_length - 1
-    )
+    time_along_plan = time - strategy.time_last_updated + 1
+    plan_is_still_valid = 1 <= time_along_plan <= strategy.turn_length
 
     update_plan = !plan_exists || !plan_is_still_valid
     if update_plan
@@ -36,6 +35,5 @@ function (strategy::RecedingHorizonStrategy)(state, time)
         strategy.time_last_updated = time
     end
 
-    time_along_plan = time - strategy.time_last_updated + 1
     strategy.receding_horizon_strategy(state, time_along_plan)
 end
