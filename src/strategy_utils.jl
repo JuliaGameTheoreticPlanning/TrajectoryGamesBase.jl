@@ -33,6 +33,7 @@ function (strategy::RecedingHorizonStrategy)(state, time)
         strategy.receding_horizon_strategy =
             solve_trajectory_game!(strategy.solver, strategy.game, state; strategy.solve_kwargs...)
         strategy.time_last_updated = time
+        time_along_plan = 1
     end
 
     strategy.receding_horizon_strategy(state, time_along_plan)
