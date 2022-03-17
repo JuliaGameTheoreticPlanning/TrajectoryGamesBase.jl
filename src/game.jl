@@ -10,7 +10,7 @@ Base.@kwdef struct TrajectoryGame{TD<:AbstractDynamics,TC,TE<:AbstractEnvironmen
     `con(xs, us) -> gs`: returning a collection of scalar constraints `gs` each of which is negative
     if the corresponding contraint is active.
     """
-    coupling_constraints::TS
+    coupling_constraints::TS = nothing
 end
 
 function num_players(g::TrajectoryGame)
