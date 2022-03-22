@@ -43,9 +43,13 @@ struct TimeSeparableTrajectoryGameCost{T1,T2,T3}
     `AbstractCostStructure` for further details.
     """
     structure::T3
+    "A discount factor γ ∈ (0, 1] that exponentially decays the weight of future stage costs."
+    discount_factor::Float64
 end
 
 function (c::TimeSeparableTrajectoryGameCost)(xs, us)
     ts = Iterators.eachindex(xs)
-    Iterators.map((x, u, t) -> c.stage_cost(x, u, t), xs, us, ts) |> c.reducer
+    Iterators.map(xs, us, ts) do x, u, t
+        c.discount_factor^(t - 1) .* c.stage_cost(x, u, t)
+    end |> c.reducer
 end
