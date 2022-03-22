@@ -20,7 +20,7 @@ Base.@kwdef mutable struct RecedingHorizonStrategy{TS,TG,TSK}
     solve_kwargs::TSK = (;)
     receding_horizon_strategy::Any = nothing
     time_last_updated::Int = 0
-    turn_length::Int = 10
+    turn_length::Int
 end
 
 function (strategy::RecedingHorizonStrategy)(state, time)
