@@ -28,7 +28,7 @@ end
 
 struct TimeSeparableTrajectoryGameCost{T1,T2,T3}
     """
-    A function `(x, u, t) -> sc` which maps the joint state `x` and input `u` for a given time step
+    A function `(x, u, t, context_information) -> sc` which maps the joint state `x` and input `u` for a given time step and surrounding context information
     `t` to a tuple of scalar costs `sc` for each player at that time.
     """
     stage_cost::T1
@@ -47,9 +47,9 @@ struct TimeSeparableTrajectoryGameCost{T1,T2,T3}
     discount_factor::Float64
 end
 
-function (c::TimeSeparableTrajectoryGameCost)(xs, us)
+function (c::TimeSeparableTrajectoryGameCost)(xs, us, context_information)
     ts = Iterators.eachindex(xs)
     Iterators.map(xs, us, ts) do x, u, t
-        c.discount_factor^(t - 1) .* c.stage_cost(x, u, t)
+        c.discount_factor^(t - 1) .* c.stage_cost(x, u, t, context_information)
     end |> c.reducer
 end
