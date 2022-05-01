@@ -12,6 +12,18 @@ function join_actions(actions)
     mortar(actions)
 end
 
+function visualize_strategy!(
+    axis,
+    strategy::Makie.Observable{<:JointStrategy};
+    player_colors = range(colorant"red", colorant"blue", length = length(strategy[].substrategies)),
+    weight_offset = 0.0,
+)
+    for player_i in 1:length(strategy[].substrategies)
+        γ = Makie.@lift $strategy.substrategies[player_i]
+        visualize_strategy!(axis, γ, player_colors[player_i]; weight_offset)
+    end
+end
+
 #== RecedingHorizonStrategy ==#
 
 Base.@kwdef mutable struct RecedingHorizonStrategy{TS,TG,TSK}

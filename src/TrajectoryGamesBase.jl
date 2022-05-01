@@ -5,6 +5,8 @@ module TrajectoryGamesBase
 using BlockArrays: AbstractBlockArray, BlockArray, Block, blocks, mortar, blocksizes, blocksize
 using InfiniteArrays: Fill, ∞
 using SparseArrays: blockdiag, sparse
+using Makie: Makie, @recipe
+using Colors: @colorant_str
 
 include("temporal_structure_trait.jl")
 
