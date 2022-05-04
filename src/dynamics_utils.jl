@@ -10,7 +10,7 @@ each rollout state `x` and time `t`.
 Returns a tuple of collections over states `xs`, inputs `us`, and extra information `infos`.
 """
 function rollout(dynamics, strategy, x1, T = horizon(dynamics); get_info = (γ, x, t) -> nothing)
-    xs = sizehint!([x1], T)
+    xs = sizehint!(Any[x1], T)
     us = sizehint!([strategy(x1, 1)], T)
     infos = sizehint!([get_info(strategy, x1, 1)], T)
 
