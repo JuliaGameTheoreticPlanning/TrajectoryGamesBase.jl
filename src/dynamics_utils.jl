@@ -23,5 +23,5 @@ function rollout(dynamics, strategy, x1, T = horizon(dynamics); get_info = (γ, 
         push!(infos, infop)
     end
 
-    xs, us, infos
+    (; xs, us, infos)
 end
