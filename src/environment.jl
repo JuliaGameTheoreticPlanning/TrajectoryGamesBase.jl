@@ -1,7 +1,7 @@
 abstract type AbstractEnvironment end
 
 # TODO add documentation
-function to_sublevelset end
+function get_position_constraints end
 
 """
     geometry(env::AbstractEnvironment)
