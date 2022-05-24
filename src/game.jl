@@ -1,5 +1,6 @@
 Base.@kwdef struct TrajectoryGame{TD<:AbstractDynamics,TC,TE<:AbstractEnvironment,TS}
-    "A cost function taking a trajectory pairing (xs, us) in Blocks and an optional context information and gives the cost per player in a tuple."
+    "A cost function taking (xs, us, [context]) with states `xs` and inputs `us` in Blocks and an
+    optional `context` information. Returns a tuple cost value per player."
     cost::TC
     "An object that describes the dynamics of this trajectory game"
     dynamics::TD

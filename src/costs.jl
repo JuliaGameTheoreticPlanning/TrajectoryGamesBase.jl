@@ -10,8 +10,8 @@ struct GeneralSumCostStructure <: AbstractCostStructure end
 
 struct TrajectoryGameCost{T1,T2}
     """
-    A function `(xs, us) -> cs` that maps a sequence of joint states `xs` and inputs `us` to a tuple
-    of scalar costs per player.
+    A function `(xs, us, context) -> cs` that maps a sequence of joint states `xs` and inputs `us`
+    and `context` information to a tuple of scalar costs per player.
     """
     _f::T1
     """
@@ -28,8 +28,9 @@ end
 
 struct TimeSeparableTrajectoryGameCost{T1,T2,T3}
     """
-    A function `(x, u, t, context_state) -> sc` which maps the joint state `x` and input `u` for a given time step and surrounding context information
-    `t` to a tuple of scalar costs `sc` for each player at that time.
+    A function `(x, u, t, context_state) -> sc` which maps the joint state `x` and input `u` for a
+    given time step and surrounding context information `t` to a tuple of scalar costs `sc` for each
+    player at that time.
     """
     stage_cost::T1
     """
