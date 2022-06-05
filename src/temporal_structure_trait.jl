@@ -3,8 +3,9 @@ struct TimeVarying <: AbstractTemporalStructureTrait end
 struct TimeInvariant <: AbstractTemporalStructureTrait end
 
 """
-    temporal_structure_trait(::Union{AbstractDynamics, AbstractStrategy})
+    temporal_structure_trait(object)
 
-Returns an `AbstractTemporalStructureTrait` to signal if a strategy of system is time varying or not.
+Returns an `AbstractTemporalStructureTrait` to signal if this object (e.g. strategy or dynamics) is
+time varying or not.
 """
 function temporal_structure_trait end
