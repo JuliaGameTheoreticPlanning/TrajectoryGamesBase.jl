@@ -1,10 +1,8 @@
-abstract type AbstractEnvironment end
-
 # TODO add documentation
 function get_position_constraints end
 
 """
-    geometry(env::AbstractEnvironment)
+    geometry(environment)
 
 Returns a geometry object that supports visualization with Makie.jl.
 """
