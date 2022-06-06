@@ -19,7 +19,7 @@ function rollout(dynamics, strategy, x1, T = horizon(dynamics); get_info = (γ, 
         push!(xs, xp)
         up = strategy(xp, tt + 1)
         push!(us, up)
-        infop = get_info(strategy, x1, tt + 1)
+        infop = get_info(strategy, xs[tt], tt + 1)
         push!(infos, infop)
     end
 
