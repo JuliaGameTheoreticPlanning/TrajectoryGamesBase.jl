@@ -17,10 +17,6 @@ function cost_structure_trait end
     TrajectoryGameCost(f, structure)
 
 A generic cost representation for a `TrajectoryGame`.
-
-The cost is callable as `cost(xs, us, context) -> cost_per_player` to map a sequence of states `xs`
-and inputs `us` as well as a `context` object to a collection of costs, one scalar value for each
-player.
 """
 struct TrajectoryGameCost{T1,T2}
     """
