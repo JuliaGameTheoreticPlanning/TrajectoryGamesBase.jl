@@ -4,8 +4,8 @@ applying the inputs dictated by the strategy.
 
 Kwargs:
 
-- `get_info` is a callback `(γ, x, t) -> info` that can be passed to extract additional info from the strategy `γ` for
-each rollout state `x` and time `t`.
+- `get_info` is a callback `(γ, x, t) -> info` that can be passed to extract additional info from \
+the strategy `γ` for each rollout state `x` and time `t`.
 
 Returns a tuple of collections over states `xs`, inputs `us`, and extra information `infos`.
 """

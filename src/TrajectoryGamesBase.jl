@@ -8,8 +8,6 @@ using SparseArrays: blockdiag, sparse
 using Makie: Makie, @recipe
 using Colors: @colorant_str
 
-include("temporal_structure_trait.jl")
-
 include("dynamics.jl")
 include("product_dynamics.jl")
 include("linear_dynamics.jl")
