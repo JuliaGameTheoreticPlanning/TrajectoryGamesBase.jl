@@ -1,6 +1,6 @@
 using TrajectoryGamesBase
-using Test
+using Test: @testset
 
 @testset "TrajectoryGamesBase.jl" begin
-    # Write your tests here.
+    # TODO: add unit tests. For now we only have integration tests of downstream packages.
 end
