@@ -11,6 +11,10 @@ Makie = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
 SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
 [compat]
+BlockArrays = "0.16"
+Colors = "0.12"
+InfiniteArrays = "0.12"
+Makie = "0.17"
 julia = "1.7"
 
 [extras]
