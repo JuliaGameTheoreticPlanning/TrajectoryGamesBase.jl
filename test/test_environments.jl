@@ -17,7 +17,9 @@
 
     @testset "geometry" begin
         for env in (CircleEnvironment(), PolygonEnvironment(), CirclePolygonEnvironment())
-            geometry(env)
+            fig = GLMakie.Figure()
+            ax = GLMakie.Axis(fig[1, 1])
+            TrajectoryGamesBase.visualize!(ax, env)
         end
     end
 end

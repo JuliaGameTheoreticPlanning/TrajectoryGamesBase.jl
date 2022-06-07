@@ -20,6 +20,8 @@ include("game.jl")
 include("strategy.jl")
 include("strategy_utils.jl")
 
+include("visualization.jl")
+
 include("solver.jl")
 
 end

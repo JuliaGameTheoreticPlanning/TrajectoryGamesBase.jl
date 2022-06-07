@@ -6,10 +6,3 @@ non-deterministic. Hence, unless it is seeded to the same pseudo-random state, i
 of `strategy` may yield different actions.
 """
 abstract type AbstractStrategy end
-
-"""
-    visualize_strategy!(fig, strategy, player_color)
-
-Visualize the strategy `strategy` on a Makie canvas `fig` with a given `player_color`.
-"""
-function visualize_strategy! end

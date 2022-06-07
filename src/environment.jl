@@ -7,10 +7,3 @@ real-valued vector of constraint evaluations where `gs[i] >= 0` indicates that t
 satisfied by the given `state`.
 """
 function get_constraints end
-
-"""
-    geometry(environment)
-
-Returns a geometry object that supports visualization with Makie.jl.
-"""
-function geometry end

@@ -12,15 +12,16 @@ function join_actions(actions)
     mortar(actions)
 end
 
-function visualize_strategy!(
-    axis,
+function visualize!(
+    canvas,
     strategy::Makie.Observable{<:JointStrategy};
-    player_colors = range(colorant"red", colorant"blue", length = length(strategy[].substrategies)),
+    colors = range(colorant"red", colorant"blue", length = length(strategy[].substrategies)),
     weight_offset = 0.0,
 )
     for player_i in 1:length(strategy[].substrategies)
+        color = colors[player_i]
         γ = Makie.@lift $strategy.substrategies[player_i]
-        visualize_strategy!(axis, γ, player_colors[player_i]; weight_offset)
+        visualize!(canvas, γ; color, weight_offset)
     end
 end
 
