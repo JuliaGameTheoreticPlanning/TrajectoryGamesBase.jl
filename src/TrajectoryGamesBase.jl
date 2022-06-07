@@ -12,16 +12,12 @@ include("dynamics.jl")
 include("product_dynamics.jl")
 include("linear_dynamics.jl")
 include("dynamics_utils.jl")
-
 include("costs.jl")
 include("environment.jl")
 include("game.jl")
-
 include("strategy.jl")
 include("strategy_utils.jl")
-
-include("visualization.jl")
-
-include("solver.jl")
+include("solve.jl")
+include("visualize.jl")
 
 end
