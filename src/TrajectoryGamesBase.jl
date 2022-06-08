@@ -6,6 +6,7 @@ using SparseArrays: blockdiag, sparse
 using Makie: Makie, @recipe
 using Colors: @colorant_str
 
+include("visualize.jl")
 include("dynamics.jl")
 include("product_dynamics.jl")
 include("linear_dynamics.jl")
@@ -16,6 +17,5 @@ include("game.jl")
 include("strategy.jl")
 include("strategy_utils.jl")
 include("solve.jl")
-include("visualize.jl")
 
 end
