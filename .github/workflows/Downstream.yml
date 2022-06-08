@@ -17,8 +17,10 @@ jobs:
         julia-version: [1]
         os: [ubuntu-latest]
         package:
-          - {user: lassepe, repo: TrajectoryGamesExamples.jl, group: Examples}
+          - { user: lassepe, repo: TrajectoryGamesExamples.jl, group: Examples }
     steps:
+      # install xvfb-run related dependencies for GLMakie
+      - run: sudo apt-get update && sudo apt-get install -y xvfb
       - uses: actions/checkout@v3
       - uses: julia-actions/setup-julia@v1
         with:
