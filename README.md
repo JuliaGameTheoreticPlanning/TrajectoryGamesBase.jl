@@ -8,4 +8,4 @@ Note that this package does not contain any solver code. It merely serves as abs
 
 ## Usage
 
-This README will be expanded to include more concrete usage instructions. Until then, please refer to the `test/runtets.jl` file as a source of implicit documentation.
+This README will be expanded to include more concrete usage instructions. Until then, please refer to the `test/runtests.jl` file as a source of implicit documentation.
