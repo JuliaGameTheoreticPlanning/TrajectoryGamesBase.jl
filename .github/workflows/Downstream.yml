@@ -32,7 +32,7 @@ jobs:
           path: downstream
           ssh-key: ${{ secrets.INTEGRATION_DEPLOY_KEY_PRIV }}
       - name: Load this and run the downstream tests
-        shell: julia --color=yes --project=downstream {0}
+        shell: xfvb-run -a julia -t 3 --color=yes --project=downstream {0}
         run: |
           using Pkg
           try
