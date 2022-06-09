@@ -16,6 +16,7 @@ SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 [compat]
 BlockArrays = "0.16"
 Colors = "0.12"
+GeometryBasics = "0.4.2"
 InfiniteArrays = "0.12"
 LazySets = "1.54"
 Makie = "0.17"
