@@ -6,6 +6,7 @@ using SparseArrays: blockdiag, sparse
 using Makie: Makie, @recipe
 using Colors: @colorant_str
 using LazySets: LazySets
+using GeometryBasics: GeometryBasics
 
 include("visualize.jl")
 export visualize!
