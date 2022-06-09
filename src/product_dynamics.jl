@@ -58,18 +58,6 @@ function horizon(dynamics::ProductDynamics)
     horizon(first(dynamics.subsystems))
 end
 
-function linearize(sys::ProductDynamics, x, u)
-    error("Not Implemented")
-    linearized_subsystems = map(eachindex(subsystems)) do ii
-        sub = sys.subsystems
-        x_sub = [xt[Block(ii)] for xt in x]
-        u_sub = [ut[Block(ii)] for ut in u]
-        linearize(sub, x_sub, u_sub)
-    end
-
-    @assert false
-end
-
 function temporal_structure_trait(dynamics::ProductDynamics)
     if all(sub -> temporal_structure_trait(sub) isa TimeInvariant, dynamics.subsystems)
         return TimeInvariant()

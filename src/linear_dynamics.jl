@@ -61,34 +61,30 @@ function (sys::LinearDynamics)(x, u, ::Nothing = nothing)
     sys.A.value * x + sys.B.value * u
 end
 
-function TrajectoryGamesBase.state_dim(sys::LinearDynamics)
+function state_dim(sys::LinearDynamics)
     size(first(sys.A), 1)
 end
 
-function TrajectoryGamesBase.control_dim(sys::LinearDynamics)
+function control_dim(sys::LinearDynamics)
     size(first(sys.B), 2)
 end
 
-function TrajectoryGamesBase.control_dim(sys::LinearDynamics, ii)
+function control_dim(sys::LinearDynamics, ii)
     blocksizes(first(sys.B), 2)[ii]
 end
 
-function TrajectoryGamesBase.state_bounds(sys::LinearDynamics)
+function state_bounds(sys::LinearDynamics)
     sys.state_bounds
 end
 
-function TrajectoryGamesBase.control_bounds(sys::LinearDynamics)
+function control_bounds(sys::LinearDynamics)
     sys.control_bounds
 end
 
-function TrajectoryGamesBase.linearize(sys::LinearDynamics, x, u)
-    sys
-end
-
-function TrajectoryGamesBase.horizon(sys::LinearDynamics)
+function horizon(sys::LinearDynamics)
     length(sys.B)
 end
 
-function TrajectoryGamesBase.num_players(sys::LinearDynamics)
+function num_players(sys::LinearDynamics)
     blocksize(sys.B.value, 2)
 end

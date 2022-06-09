@@ -44,13 +44,6 @@ function num_players end
 "The number of time steps the dynamics are valid for."
 function horizon end
 
-"""
-    linearize(dynamics, x, u) -> LinearDynamics
-Linearize about a trajectory `(x, u)` with `x` and and `u` layed out as `Vector{Vector}` (time
-indexed).
-"""
-function linearize end
-
 #=== generic utils ===#
 
 """

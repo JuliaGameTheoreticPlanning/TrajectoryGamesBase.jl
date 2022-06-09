@@ -19,7 +19,6 @@ export AbstractTemporalStructureTrait,
     control_bounds,
     control_dim,
     horizon,
-    linearize,
     num_players,
     rollout,
     state_bounds,
@@ -30,7 +29,7 @@ include("product_dynamics.jl")
 export ProductDynamics
 
 include("linear_dynamics.jl")
-export LinearDynamics
+export LinearDynamics, time_invariant_linear_dynamics
 
 include("costs.jl")
 export AbstractCostStructure,
