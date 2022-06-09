@@ -7,6 +7,7 @@ using Makie: Makie, @recipe
 using Colors: @colorant_str
 using LazySets: LazySets
 using GeometryBasics: GeometryBasics
+using Polyhedra: Polyhedra
 
 include("visualize.jl")
 export visualize!

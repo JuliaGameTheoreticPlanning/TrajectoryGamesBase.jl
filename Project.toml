@@ -11,6 +11,7 @@ InfiniteArrays = "4858937d-0d70-526a-a4dd-2d5cb5dd786c"
 LazySets = "b4f0291d-fe17-52bc-9479-3d1a343d9043"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 Makie = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
+Polyhedra = "67491407-f73d-577b-9b50-8179a7c68029"
 SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
 [compat]
@@ -20,6 +21,7 @@ GeometryBasics = "0.4.2"
 InfiniteArrays = "0.12"
 LazySets = "1.54"
 Makie = "0.17"
+Polyhedra = "0.7"
 julia = "1.7"
 
 [extras]
