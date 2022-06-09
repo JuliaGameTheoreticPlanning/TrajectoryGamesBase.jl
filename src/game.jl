@@ -1,9 +1,9 @@
 Base.@kwdef struct TrajectoryGame{TD<:AbstractDynamics,TC,TE,TS}
+    "An object that describes the dynamics of this trajectory game"
+    dynamics::TD
     "A cost function taking (xs, us, [context]) with states `xs` and inputs `us` in Blocks and an
     optional `context` information. Returns a collection of cost values; one per player."
     cost::TC
-    "An object that describes the dynamics of this trajectory game"
-    dynamics::TD
     "The environment object that characerizes static constraints of the problem and can be used for
     visualization."
     env::TE
