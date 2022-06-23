@@ -52,5 +52,6 @@ export AbstractStrategy, #
     join_actions
 
 include("solve.jl")
+export solve_trajectory_game!
 
 end
