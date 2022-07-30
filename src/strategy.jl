@@ -9,8 +9,14 @@ abstract type AbstractStrategy end
 
 #== JointStrategy ==#
 
-struct JointStrategy{T} <: AbstractStrategy
-    substrategies::T
+struct JointStrategy{T1,T2} <: AbstractStrategy
+    substrategies::T1
+    info::T2
+end
+
+function JointStrategy(substrategies)
+    info = nothing
+    JointStrategy(substrategies, info)
 end
 
 function (strategy::JointStrategy)(x, t = nothing)
