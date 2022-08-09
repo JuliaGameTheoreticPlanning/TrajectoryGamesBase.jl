@@ -42,13 +42,14 @@ end
 
 #== RecedingHorizonStrategy ==#
 
-Base.@kwdef mutable struct RecedingHorizonStrategy{TS,TG,TSK}
-    solver::TS
-    game::TG
-    solve_kwargs::TSK = (;)
+Base.@kwdef mutable struct RecedingHorizonStrategy{T1,T2,T3}
+    solver::T1
+    game::T2
+    solve_kwargs::NamedTuple = (;)
     receding_horizon_strategy::Any = nothing
     time_last_updated::Int = 0
     turn_length::Int
+    generate_initial_guess::T3 = (last_strategy, state, time) -> nothing
 end
 
 function (strategy::RecedingHorizonStrategy)(state, time)
@@ -58,8 +59,15 @@ function (strategy::RecedingHorizonStrategy)(state, time)
 
     update_plan = !plan_exists || !plan_is_still_valid
     if update_plan
-        strategy.receding_horizon_strategy =
-            solve_trajectory_game!(strategy.solver, strategy.game, state; strategy.solve_kwargs...)
+        initial_guess = strategy.generate_initial_guess(strategy.receding_horizon_strategy, state, time)
+        warm_start_kwargs = isnothing(initial_guess) ? (;) : (; initial_guess)
+        strategy.receding_horizon_strategy = solve_trajectory_game!(
+            strategy.solver,
+            strategy.game,
+            state;
+            strategy.solve_kwargs...,
+            warm_start_kwargs...,
+        )
         strategy.time_last_updated = time
         time_along_plan = 1
     end

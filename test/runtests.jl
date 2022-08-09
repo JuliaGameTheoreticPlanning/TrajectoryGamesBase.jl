@@ -63,6 +63,24 @@ function setup_tag_examples(; Δt = 0.1)
     (; generic_game, time_separable_game)
 end
 
+module Mock
+using TrajectoryGamesBase: TrajectoryGamesBase
+using Test: @test
+
+struct Solver end
+
+function TrajectoryGamesBase.solve_trajectory_game!(
+    solver,
+    game,
+    initial_state;
+    initial_guess = nothing,
+)
+    @test !isnothing(initial_guess)
+    trivial_strategy = (x, t) -> zeros(2)
+    TrajectoryGamesBase.JointStrategy([trivial_strategy, trivial_strategy])
+end
+end
+
 @testset "TrajectoryGamesBase.jl" begin
     examples = setup_tag_examples()
     last_total_costs = nothing
@@ -76,16 +94,16 @@ end
             horizon = 20
             context = nothing
 
-            local steps
+            local trivial_steps
 
             @testset "dynamics" begin
                 linear_dynamics = LinearDynamics(game.dynamics)
                 u_random = mortar([rand(2), rand(2)])
                 t = 1
-                steps = rollout(game.dynamics, trivial_joint_strategy, x1, horizon)
+                trivial_steps = rollout(game.dynamics, trivial_joint_strategy, x1, horizon)
                 linear_steps = rollout(linear_dynamics, trivial_joint_strategy, x1, horizon)
-                @test all(x == x1 for x in steps.xs)
-                @test steps == linear_steps
+                @test all(x == x1 for x in trivial_steps.xs)
+                @test trivial_steps == linear_steps
                 @test game.dynamics(x1, u_random, t) ≈ linear_dynamics(x1, u_random, t)
                 @test state_dim(linear_dynamics) == state_dim(game.dynamics) == 8
                 @test control_dim(linear_dynamics) == control_dim(game.dynamics) == 4
@@ -99,7 +117,7 @@ end
             @testset "cost" begin
                 @test cost_structure_trait(game.cost) isa ZeroSumCostStructure
 
-                total_costs = game.cost(steps.xs, steps.us, context)
+                total_costs = game.cost(trivial_steps.xs, trivial_steps.us, context)
                 @test total_costs[1] > 0
                 @test total_costs[1] == -total_costs[2]
                 if !isnothing(last_total_costs)
@@ -114,6 +132,17 @@ end
                 @test all(constraints(zeros(4)) .> 0)
                 # probe an infeasible state
                 @test any(constraints(fill(10, 4)) .< 0)
+            end
+
+            @testset "receding horizon utils" begin
+                receding_horizon_strategy = TrajectoryGamesBase.RecedingHorizonStrategy(;
+                    solver = Mock.Solver(),
+                    game,
+                    turn_length = 2,
+                    generate_initial_guess = (last_strategy, state, time) -> :foo,
+                )
+                receding_steps = rollout(game.dynamics, receding_horizon_strategy, x1, horizon)
+                @test receding_steps == trivial_steps
             end
         end
     end
