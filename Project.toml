@@ -1,7 +1,7 @@
 name = "TrajectoryGamesBase"
 uuid = "ac1ac542-73eb-4349-ae1b-660ab3609574"
 authors = ["David Fridovich-Keil <dfk@utexas.edu>", "Forrest Laine <forrest.laine@vanderbilt.edu", "Lasse Peters <lasse.peters@mailbox.org>"]
-version = "0.2.2"
+version = "0.2.3"
 
 [deps]
 BlockArrays = "8e7c35d0-a365-5155-bbbb-fb81a777f24e"
