@@ -17,11 +17,15 @@ end
 function PolygonEnvironment(sides::Int = 4, radius = 4)
     r = radius
     N = sides
-    points = map(1:N) do n
+    vertices = map(1:N) do n
         θ = 2π * n / N + pi / sides
         [r * cos(θ), r * sin(θ)]
     end
-    PolygonEnvironment(LazySets.VPolytope(points))
+    PolygonEnvironment(vertices)
+end
+
+function PolygonEnvironment(vertices::AbstractVector{<:AbstractVector{<:Real}})
+    PolygonEnvironment(LazySets.VPolytope(vertices))
 end
 
 function visualize!(canvas, env; color = :lightgray)
