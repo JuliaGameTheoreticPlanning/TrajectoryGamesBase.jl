@@ -1,10 +1,10 @@
 """
-    get_constraints(object)
+    get_constraints(object, player_index)
 
-Returns the constraints imposed by the `object` (e.g. environment or obstacle) imposed on
-the state. The returned constraints are callable as `constraints(state) -> gs` where `gs` is a
-real-valued vector of constraint evaluations where `gs[i] >= 0` indicates that the ith constraint is
-satisfied by the given `state`.
+Returns the constraints imposed by the `object` (e.g. environment or obstacle) on the state for a
+given `player_index`. The returned constraints are callable as `constraints(state) -> gs` where `gs`
+is a real-valued vector of constraint evaluations where `gs[i] >= 0` indicates that the ith
+constraint is satisfied by the given `state`.
 """
 function get_constraints end
 
@@ -28,13 +28,13 @@ function PolygonEnvironment(vertices::AbstractVector{<:AbstractVector{<:Real}})
     PolygonEnvironment(LazySets.VPolytope(vertices))
 end
 
-function visualize!(canvas, env; color = :lightgray)
-    geometry = GeometryBasics.Polygon(GeometryBasics.Point{2}.(env.set.vertices))
+function visualize!(canvas, environment::PolygonEnvironment; color = :lightgray)
+    geometry = GeometryBasics.Polygon(GeometryBasics.Point{2}.(environment.set.vertices))
     Makie.poly!(canvas, geometry; color)
 end
 
-function get_constraints(env::PolygonEnvironment)
-    constraints = LazySets.constraints_list(env.set)
+function get_constraints(environment::PolygonEnvironment, player_index = nothing)
+    constraints = LazySets.constraints_list(environment.set)
     function (state)
         positions = (substate[1:2] for substate in blocks(state))
         mapreduce(vcat, Iterators.product(constraints, positions)) do (constraint, position)
