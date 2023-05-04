@@ -142,7 +142,17 @@ end
                     generate_initial_guess = (last_strategy, state, time) -> :foo,
                 )
                 receding_steps = rollout(game.dynamics, receding_horizon_strategy, x1, horizon)
+                receding_steps_skipped = rollout(
+                    game.dynamics,
+                    receding_horizon_strategy,
+                    x1,
+                    horizon;
+                    skip_last_strategy_call = true,
+                )
+                println("alive")
                 @test receding_steps == trivial_steps
+                @test receding_steps_skipped.xs == trivial_steps.xs
+                @test receding_steps_skipped.us == trivial_steps.us[1:(end - 1)]
             end
         end
     end
