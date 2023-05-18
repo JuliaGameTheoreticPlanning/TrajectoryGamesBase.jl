@@ -62,18 +62,6 @@ function Makie.plot!(viz::OpenLoopStrategyViz{<:Tuple{TrajectoryGamesBase.OpenLo
 
     Makie.lines!(viz, points; line_kwargs...)
     Makie.scatter!(viz, points; scatter_kwargs...)
-
-    # assuming that the number of players does not change between calls
-    for player_index in eachindex(strategy[].xs)
-        xs = Makie.Observable{Any}(nothing)
-        us = Makie.Observable{Any}(nothing)
-        Makie.on(strategy) do strategy
-            xs[] = strategy.xs[player_index]
-            us[] = strategy.us[player_index]
-        end
-        strategy[] = strategy[]
-    end
-
     viz
 end
 
