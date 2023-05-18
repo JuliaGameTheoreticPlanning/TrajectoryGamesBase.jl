@@ -1,6 +1,6 @@
 module MakieVizExt
 using TrajectoryGamesBase: TrajectoryGamesBase
-using Makie: Makie
+using Makie: Makie, @recipe
 using Colors: @colorant_str
 
 function TrajectoryGamesBase.visualize!(
@@ -26,7 +26,7 @@ function TrajectoryGamesBase.visualize!(
     end
 end
 
-Makie.@recipe(OpenLoopStrategyViz) do scene
+@recipe(OpenLoopStrategyViz) do scene
     Makie.Attributes(; line_attributes = nothing, scatter_attributes = nothing)
 end
 
@@ -72,7 +72,7 @@ end
 
 #=== Joint Strategy Visualization ===#
 
-Makie.@recipe(JointStrategyViz) do scene
+@recipe(JointStrategyViz) do scene
     Makie.Attributes(; substrategy_attributes = nothing)
 end
 

@@ -7,10 +7,6 @@ using LazySets: LazySets
 using GeometryBasics: GeometryBasics
 using Polyhedra: Polyhedra
 
-if !isdefined(Base, :get_extension)
-    include("../ext/MakieVizExt.jl")
-end
-
 include("visualize.jl")
 export visualize!
 
@@ -56,5 +52,9 @@ export AbstractStrategy, #
 
 include("solve.jl")
 export solve_trajectory_game!
+
+if !isdefined(Base, :get_extension)
+    include("../ext/MakieVizExt.jl")
+end
 
 end
