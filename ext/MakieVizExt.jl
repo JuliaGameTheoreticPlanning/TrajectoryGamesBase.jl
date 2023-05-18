@@ -2,6 +2,14 @@ module MakieVizExt
 using TrajectoryGamesBase: TrajectoryGamesBase
 using Makie: Makie, @recipe
 using Colors: @colorant_str
+using GeometryBasics: GeometryBasics
+
+Makie.plottype(::TrajectoryGamesBase.PolygonEnvironment) = Makie.Poly
+
+function Makie.convert_arguments(::Type{<:Makie.Poly}, environment)
+    geometry = GeometryBasics.Polygon(GeometryBasics.Point{2}.(environment.set.vertices))
+    (geometry,)
+end
 
 function TrajectoryGamesBase.visualize!(
     canvas,
@@ -9,8 +17,7 @@ function TrajectoryGamesBase.visualize!(
     color = :lightgray,
     kwargs...,
 )
-    geometry = GeometryBasics.Polygon(GeometryBasics.Point{2}.(environment.set.vertices))
-    Makie.poly!(canvas, geometry; color, kwargs...)
+    Makie.poly!(canvas, environment; color, kwargs...)
 end
 
 function TrajectoryGamesBase.visualize!(
