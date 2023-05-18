@@ -1,6 +1,6 @@
 using TrajectoryGamesBase
 using Test: @test, @testset
-using BlockArrays: eachblock, mortar
+using BlockArrays: Block, eachblock, mortar, blocklength
 using LinearAlgebra: norm, norm_sqr
 using Makie: Makie
 
@@ -167,5 +167,65 @@ end # Mock module
         Makie.plot(environment)
         Makie.plot!(Mock.trivial_strategy)
         Makie.plot!(trivial_joint_strategy)
+    end
+
+    @testset "trajectory utils" begin
+        @testset "to_block_vector" begin
+            x = [1, 2, 3, 4]
+            to_blockvector = TrajectoryGamesBase.to_blockvector([2, 2])
+            x_blocked = to_blockvector(x)
+            @test x_blocked == x
+            @test x_blocked[Block(1)] == [1, 2]
+            @test x_blocked[Block(2)] == [3, 4]
+        end
+
+        @testset "to_vector_of_vectors" begin
+            x = [1:40;]
+            to_vector_of_vectors = TrajectoryGamesBase.to_vector_of_vectors(4)
+            x_vector_of_vectors = to_vector_of_vectors(x)
+            @test length(x_vector_of_vectors) == 10
+            @test x_vector_of_vectors[1] == [1, 2, 3, 4]
+        end
+
+        @testset "to vector_of_blockvectors" begin
+            x = [1:40;]
+            to_vector_of_blockvectors = TrajectoryGamesBase.to_vector_of_blockvectors([2, 2])
+            x_vector_of_blockvectors = to_vector_of_blockvectors(x)
+            @test length(x_vector_of_blockvectors) == 10
+            @test x_vector_of_blockvectors[1][Block(1)] == [1, 2]
+            @test x_vector_of_blockvectors[1][Block(2)] == [3, 4]
+        end
+
+        @testset "stack and unstack trajectory" begin
+            xs = 1:40 |> TrajectoryGamesBase.to_vector_of_blockvectors([2, 2])
+            us = 1:2 |> TrajectoryGamesBase.to_vector_of_blockvectors([1, 1])
+            trajectory = (; xs, us)
+            trajectory_unstacked = TrajectoryGamesBase.unstack_trajectory(trajectory)
+
+            for (ii, player_trajectory) in pairs(trajectory_unstacked)
+                @test blocklength(player_trajectory.xs[begin]) == 1
+                @test blocklength(player_trajectory.us[begin]) == 1
+                @test player_trajectory.xs[begin] == [1, 2] .+ (ii - 1) * 2
+                @test player_trajectory.us[begin] == [1] .+ (ii - 1)
+            end
+
+            re_stacked = TrajectoryGamesBase.stack_trajectories(trajectory_unstacked)
+            @test re_stacked == trajectory
+        end
+
+        @testset "flatten and unflatten trajectory" begin
+            flat_trajectory = [1:60;]
+            unflattened_trajectory = TrajectoryGamesBase.unflatten_trajectory(
+                flat_trajectory,
+                4,
+                2
+            )
+
+            @test length(unflattened_trajectory.xs) == 10
+            @test length(unflattened_trajectory.us) == 10
+
+            re_flattened = TrajectoryGamesBase.flatten_trajectory(unflattened_trajectory)
+            @test re_flattened == flat_trajectory
+        end
     end
 end
