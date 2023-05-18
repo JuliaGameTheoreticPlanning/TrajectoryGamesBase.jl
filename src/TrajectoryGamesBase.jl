@@ -13,16 +13,17 @@ export visualize!
 
 include("dynamics.jl")
 export AbstractTemporalStructureTrait,
-    TimeInvariant,
-    TimeVarying,
     control_bounds,
     control_dim,
+    get_constraints_from_box_bounds,
     horizon,
     num_players,
     rollout,
     state_bounds,
     state_dim,
-    temporal_structure_trait
+    temporal_structure_trait,
+    TimeInvariant,
+    TimeVarying
 
 include("product_dynamics.jl")
 export ProductDynamics
@@ -58,7 +59,6 @@ include("trajectory_utils.jl")
 export to_blockvector,
     to_vector_of_vectors,
     to_vector_of_blockvectors,
-    get_constraints_from_box_bounds,
     unstack_trajectory,
     stack_trajectories,
     flatten_trajectory,
