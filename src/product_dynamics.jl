@@ -29,17 +29,10 @@ function control_dim(dynamcs::ProductDynamics, ii)
 end
 
 function _mortar_bounds(dynamics::ProductDynamics, get_bounds)
-    lbs = [Float64[] for _ in dynamics.subsystems]
-    ubs = [Float64[] for _ in dynamics.subsystems]
-
-    for ii in eachindex(dynamics.subsystems)
-        sub = dynamics.subsystems[ii]
-        bounds = get_bounds(sub)
-        push!(lbs, bounds.lb)
-        push!(ubs, bounds.ub)
-    end
-
-    (; lb = mortar(lbs), ub = mortar(ubs))
+    bounds_per_subsystem = [get_bounds(sub) for sub in dynamics.subsystems]
+    lb = mortar([bounds.lb for bounds in bounds_per_subsystem])
+    ub = mortar([bounds.ub for bounds in bounds_per_subsystem])
+    (; lb, ub)
 end
 
 function state_bounds(dynamics::ProductDynamics)
