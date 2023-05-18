@@ -1,6 +1,7 @@
 module TrajectoryGamesBase
 
-using BlockArrays: AbstractBlockArray, BlockArray, Block, blocks, mortar, blocksizes, blocksize
+using BlockArrays:
+    BlockArrays, AbstractBlockArray, BlockArray, Block, blocks, mortar, blocksizes, blocksize
 using InfiniteArrays: Fill, ∞
 using SparseArrays: blockdiag, sparse
 using LazySets: LazySets
@@ -52,6 +53,16 @@ export AbstractStrategy, #
 
 include("solve.jl")
 export solve_trajectory_game!
+
+include("trajectory_utils.jl")
+export to_blockvector,
+    to_vector_of_vectors,
+    to_vector_of_blockvectors,
+    get_constraints_from_box_bounds,
+    unstack_trajectory,
+    stack_trajectories,
+    flatten_trajectory,
+    unflatten_trajectory
 
 if !isdefined(Base, :get_extension)
     include("../ext/MakieVizExt.jl")

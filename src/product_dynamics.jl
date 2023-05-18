@@ -43,6 +43,18 @@ function control_bounds(dynamics::ProductDynamics)
     _mortar_bounds(dynamics, control_bounds)
 end
 
+function TrajectoryGamesBase.state_dim(dynamics::TrajectoryGamesBase.ProductDynamics, player_index)
+    TrajectoryGamesBase.state_dim(dynamics.subsystems[player_index])
+end
+
+function TrajectoryGamesBase.state_dim(game, player_index)
+    TrajectoryGamesBase.state_dim(game.dynamics, player_index)
+end
+
+function TrajectoryGamesBase.control_dim(game, player_index)
+    TrajectoryGamesBase.control_dim(game.dynamics, player_index)
+end
+
 function num_players(dynamics::ProductDynamics)
     length(dynamics.subsystems)
 end
