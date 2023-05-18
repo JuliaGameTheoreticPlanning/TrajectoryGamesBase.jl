@@ -66,6 +66,13 @@ end
 module Mock
 using TrajectoryGamesBase: TrajectoryGamesBase
 using Test: @test
+using InfiniteArrays: Fill, ∞
+
+const trivial_strategy = let
+    xs = nothing
+    us = Fill(zeros(2), ∞)
+    TrajectoryGamesBase.OpenLoopStrategy(xs, us)
+end
 
 struct Solver end
 
@@ -76,10 +83,9 @@ function TrajectoryGamesBase.solve_trajectory_game!(
     initial_guess = nothing,
 )
     @test !isnothing(initial_guess)
-    trivial_strategy = (x, t) -> zeros(2)
     TrajectoryGamesBase.JointStrategy([trivial_strategy, trivial_strategy])
 end
-end
+end # Mock module
 
 @testset "TrajectoryGamesBase.jl" begin
     examples = setup_tag_examples()
@@ -87,9 +93,7 @@ end
 
     for (game_name, game) in pairs(examples)
         @testset "$game_name" begin
-            trivial_strategy = (x, t) -> zeros(2)
-            trivial_joint_strategy =
-                JointStrategy([(x, t) -> zeros(2) for _ in 1:num_players(game)])
+            trivial_joint_strategy = JointStrategy([Mock.trivial_strategy, Mock.trivial_strategy])
             x1 = mortar([[1.0, 0, 0, 0], [-1.0, 0, 0, 0]])
             horizon = 20
             context = nothing

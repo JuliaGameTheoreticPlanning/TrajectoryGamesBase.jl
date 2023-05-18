@@ -7,6 +7,17 @@ of `strategy` may yield different actions.
 """
 abstract type AbstractStrategy end
 
+#== OpenLoopStrategy ==#
+#
+struct OpenLoopStrategy{T1,T2}
+    xs::T1
+    us::T2
+end
+
+function (strategy::OpenLoopStrategy)(state, time)
+    strategy.us[time]
+end
+
 #== JointStrategy ==#
 
 struct JointStrategy{T1,T2} <: AbstractStrategy
@@ -59,7 +70,8 @@ function (strategy::RecedingHorizonStrategy)(state, time)
 
     update_plan = !plan_exists || !plan_is_still_valid
     if update_plan
-        initial_guess = strategy.generate_initial_guess(strategy.receding_horizon_strategy, state, time)
+        initial_guess =
+            strategy.generate_initial_guess(strategy.receding_horizon_strategy, state, time)
         warm_start_kwargs = isnothing(initial_guess) ? (;) : (; initial_guess)
         strategy.receding_horizon_strategy = solve_trajectory_game!(
             strategy.solver,

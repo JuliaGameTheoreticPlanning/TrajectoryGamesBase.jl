@@ -47,6 +47,7 @@ export TrajectoryGame
 
 include("strategy.jl")
 export AbstractStrategy, #
+    OpenLoopStrategy,
     JointStrategy,
     RecedingHorizonStrategy,
     join_actions
