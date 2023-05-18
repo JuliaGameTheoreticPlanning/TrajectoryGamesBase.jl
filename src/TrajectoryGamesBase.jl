@@ -3,8 +3,6 @@ module TrajectoryGamesBase
 using BlockArrays: AbstractBlockArray, BlockArray, Block, blocks, mortar, blocksizes, blocksize
 using InfiniteArrays: Fill, ∞
 using SparseArrays: blockdiag, sparse
-using Makie: Makie, @recipe
-using Colors: @colorant_str
 using LazySets: LazySets
 using GeometryBasics: GeometryBasics
 using Polyhedra: Polyhedra
@@ -54,5 +52,9 @@ export AbstractStrategy, #
 
 include("solve.jl")
 export solve_trajectory_game!
+
+if !isdefined(Base, :get_extension)
+    include("../ext/MakieVizExt.jl")
+end
 
 end

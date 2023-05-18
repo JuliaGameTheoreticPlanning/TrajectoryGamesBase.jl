@@ -2,8 +2,9 @@ using TrajectoryGamesBase
 using Test: @test, @testset
 using BlockArrays: eachblock, mortar
 using LinearAlgebra: norm, norm_sqr
+using Makie: Makie
 
-function setup_tag_examples(; Δt = 0.1)
+function setup_tag_examples(; Δt=0.1)
     dynamics = let
         A = [
             1 0 Δt 0
@@ -57,8 +58,8 @@ function setup_tag_examples(; Δt = 0.1)
 
     env = PolygonEnvironment()
 
-    generic_game = TrajectoryGame(; dynamics, cost = generic_cost, env)
-    time_separable_game = TrajectoryGame(; dynamics, cost = time_separable_cost, env)
+    generic_game = TrajectoryGame(; dynamics, cost=generic_cost, env)
+    time_separable_game = TrajectoryGame(; dynamics, cost=time_separable_cost, env)
 
     (; generic_game, time_separable_game)
 end
@@ -66,11 +67,10 @@ end
 module Mock
 using TrajectoryGamesBase: TrajectoryGamesBase
 using Test: @test
-using InfiniteArrays: Fill, ∞
 
 const trivial_strategy = let
-    xs = nothing
-    us = Fill(zeros(2), ∞)
+    xs = [zeros(4) for _ in 1:20]
+    us = [zeros(2) for _ in 1:20]
     TrajectoryGamesBase.OpenLoopStrategy(xs, us)
 end
 
@@ -80,7 +80,7 @@ function TrajectoryGamesBase.solve_trajectory_game!(
     solver,
     game,
     initial_state;
-    initial_guess = nothing,
+    initial_guess=nothing
 )
     @test !isnothing(initial_guess)
     TrajectoryGamesBase.JointStrategy([trivial_strategy, trivial_strategy])
@@ -140,10 +140,10 @@ end # Mock module
 
             @testset "receding horizon utils" begin
                 receding_horizon_strategy = TrajectoryGamesBase.RecedingHorizonStrategy(;
-                    solver = Mock.Solver(),
+                    solver=Mock.Solver(),
                     game,
-                    turn_length = 2,
-                    generate_initial_guess = (last_strategy, state, time) -> :foo,
+                    turn_length=2,
+                    generate_initial_guess=(last_strategy, state, time) -> :foo
                 )
                 receding_steps = rollout(game.dynamics, receding_horizon_strategy, x1, horizon)
                 receding_steps_skipped = rollout(
@@ -151,13 +151,21 @@ end # Mock module
                     receding_horizon_strategy,
                     x1,
                     horizon;
-                    skip_last_strategy_call = true,
+                    skip_last_strategy_call=true
                 )
-                println("alive")
                 @test receding_steps == trivial_steps
                 @test receding_steps_skipped.xs == trivial_steps.xs
-                @test receding_steps_skipped.us == trivial_steps.us[1:(end - 1)]
+                @test receding_steps_skipped.us == trivial_steps.us[1:(end-1)]
             end
         end
+    end
+
+    @testset "visualization" begin
+        trivial_joint_strategy = JointStrategy([Mock.trivial_strategy, Mock.trivial_strategy])
+
+        environment = PolygonEnvironment()
+        Makie.plot(environment)
+        Makie.plot!(Mock.trivial_strategy)
+        Makie.plot!(trivial_joint_strategy)
     end
 end

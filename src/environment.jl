@@ -28,11 +28,6 @@ function PolygonEnvironment(vertices::AbstractVector{<:AbstractVector{<:Real}})
     PolygonEnvironment(LazySets.VPolytope(vertices))
 end
 
-function visualize!(canvas, environment::PolygonEnvironment; color = :lightgray, kwargs...)
-    geometry = GeometryBasics.Polygon(GeometryBasics.Point{2}.(environment.set.vertices))
-    Makie.poly!(canvas, geometry; color, kwargs...)
-end
-
 function get_constraints(environment::PolygonEnvironment, player_index = nothing)
     constraints = LazySets.constraints_list(environment.set)
     function (state)
