@@ -3,11 +3,13 @@ module TrajectoryGamesBase
 using BlockArrays: AbstractBlockArray, BlockArray, Block, blocks, mortar, blocksizes, blocksize
 using InfiniteArrays: Fill, ∞
 using SparseArrays: blockdiag, sparse
-using Makie: Makie, @recipe
-using Colors: @colorant_str
 using LazySets: LazySets
 using GeometryBasics: GeometryBasics
 using Polyhedra: Polyhedra
+
+if !isdefined(Base, :get_extension)
+    include("../ext/MakieVizExt.jl")
+end
 
 include("visualize.jl")
 export visualize!
