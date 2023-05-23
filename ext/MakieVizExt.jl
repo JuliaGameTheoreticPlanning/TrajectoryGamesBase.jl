@@ -34,34 +34,49 @@ function TrajectoryGamesBase.visualize!(
 end
 
 @recipe(OpenLoopStrategyViz) do scene
-    Makie.Attributes(; line_attributes = nothing, scatter_attributes = nothing)
+    Makie.Attributes(;
+        color = :black,
+        position_subsampling = 1,
+        trajectory_point_size = 5,
+        starttime = nothing,
+        endtime = nothing,
+        visible = true,
+        scale_factor = 1.0,
+        extra_attributes = nothing,
+    )
 end
 
 Makie.plottype(::TrajectoryGamesBase.OpenLoopStrategy) = OpenLoopStrategyViz
 
 function Makie.plot!(viz::OpenLoopStrategyViz{<:Tuple{TrajectoryGamesBase.OpenLoopStrategy}})
     strategy = viz[1]
-
-    points = Makie.@lift [Makie.Point2f(x[1:2]) for x in $strategy.xs]
-
-    if isnothing(viz.line_attributes[])
-        line_kwargs = (;)
+    strategy_points = Makie.@lift(
+        begin
+            starttime = something($(viz.starttime), firstindex($strategy.xs))
+            endtime = something($(viz.endtime), lastindex($strategy.xs))
+            [
+                Makie.Point2f(xi[1], xi[2]) for
+                xi in $strategy.xs[starttime:($(viz.position_subsampling)):endtime]
+            ]
+        end
+    )
+    if isnothing(viz.extra_attributes[])
+        kwargs = (;)
     else
-        line_kwargs = map(keys(viz.line_attributes[])) do key
-            key => Makie.@lift($(viz.line_kwargs)[key])
+        kwargs = map(keys(viz.extra_attributes[])) do key
+            key => Makie.@lift($(viz.extra_attributes)[key])
         end |> NamedTuple
     end
 
-    if isnothing(viz.scatter_attributes[])
-        scatter_kwargs = (;)
-    else
-        scatter_kwargs = map(keys(viz.scatter_attributes[])) do key
-            key => Makie.@lift($(viz.scatter_kwargs)[key])
-        end |> NamedTuple
-    end
-
-    Makie.lines!(viz, points; line_kwargs...)
-    Makie.scatter!(viz, points; scatter_kwargs...)
+    Makie.lines!(viz, strategy_points; viz.color, viz.visible, kwargs...)
+    Makie.scatter!(
+        viz,
+        strategy_points;
+        color = viz.color,
+        markersize = Makie.@lift($(viz.trajectory_point_size) * $(viz.scale_factor)),
+        viz.visible,
+        kwargs...,
+    )
     viz
 end
 
