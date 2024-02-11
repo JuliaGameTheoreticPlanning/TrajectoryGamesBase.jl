@@ -51,11 +51,11 @@ function time_invariant_linear_dynamics(; A, B, horizon = ∞, bounds...)
     LinearDynamics(; A = Fill(A, horizon), B = Fill(B, horizon), bounds...)
 end
 
-function (sys::LinearDynamics)(x, u, t::Int)
+function (sys::LinearDynamics)(x, u, t::Int, ::Any = nothing)
     sys.A[t] * x + sys.B[t] * u
 end
 
-function (sys::LinearDynamics)(x, u, ::Nothing = nothing)
+function (sys::LinearDynamics)(x, u, ::Nothing = nothing, ::Any = nothing)
     temporal_structure_trait(sys) isa TimeInvariant ||
         error("Only time-invariant systems can ommit the `t` argument.")
     sys.A.value * x + sys.B.value * u

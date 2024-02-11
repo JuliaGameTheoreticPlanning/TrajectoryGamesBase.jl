@@ -55,10 +55,10 @@ struct TimeSeparableTrajectoryGameCost{T1,T2,T3}
     discount_factor::Float64
 end
 
-function (c::TimeSeparableTrajectoryGameCost)(xs, us, context_state)
+function (c::TimeSeparableTrajectoryGameCost)(xs, us, context)
     ts = Iterators.eachindex(xs)
     Iterators.map(xs, us, ts) do x, u, t
-        c.discount_factor^(t - 1) .* c.stage_cost(x, u, t, context_state)
+        c.discount_factor^(t - 1) .* c.stage_cost(x, u, t, context)
     end |> c.reducer
 end
 

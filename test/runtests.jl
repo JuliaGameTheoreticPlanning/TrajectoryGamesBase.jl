@@ -80,7 +80,8 @@ function TrajectoryGamesBase.solve_trajectory_game!(
     solver,
     game,
     initial_state;
-    initial_guess=nothing
+    context=nothing,
+    initial_guess=nothing,
 )
     @test !isnothing(initial_guess)
     TrajectoryGamesBase.JointStrategy([trivial_strategy, trivial_strategy])
@@ -133,9 +134,9 @@ end # Mock module
             @testset "environment" begin
                 constraints = get_constraints(game.env)
                 # probe a feasible state
-                @test all(constraints(zeros(4)) .> 0)
+                @test all(constraints(zeros(4), context) .> 0)
                 # probe an infeasible state
-                @test any(constraints(fill(10, 4)) .< 0)
+                @test any(constraints(fill(10, 4), context) .< 0)
             end
 
             @testset "receding horizon utils" begin
