@@ -6,10 +6,10 @@ Base.@kwdef struct TrajectoryGame{TD<:AbstractDynamics,TC,TE,TS}
     cost::TC
     "The environment object that characerizes static constraints of the problem and can be used for
     visualization."
-    env::TE
+    environment::TE
     "An object which encodes the constraints between different players. It must be callable as
-    `con(xs, us, context) -> gs`: returning a collection of scalar constraints `gs` each of which is negative
-    if the corresponding contraint is active."
+    `con(state, control, context) -> gs`: returning a collection of scalar constraints `gs` each of which non-negative
+    when the constraint is satisfied."
     coupling_constraints::TS = nothing
 end
 

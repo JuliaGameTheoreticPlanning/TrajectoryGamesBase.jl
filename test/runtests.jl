@@ -56,10 +56,10 @@ function setup_tag_examples(; Δt=0.1)
         end
     end
 
-    env = PolygonEnvironment()
+    environment = PolygonEnvironment()
 
-    generic_game = TrajectoryGame(; dynamics, cost=generic_cost, env)
-    time_separable_game = TrajectoryGame(; dynamics, cost=time_separable_cost, env)
+    generic_game = TrajectoryGame(; dynamics, cost=generic_cost, environment)
+    time_separable_game = TrajectoryGame(; dynamics, cost=time_separable_cost, environment)
 
     (; generic_game, time_separable_game)
 end
