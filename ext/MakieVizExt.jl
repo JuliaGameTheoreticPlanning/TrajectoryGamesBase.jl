@@ -6,31 +6,12 @@ using GeometryBasics: GeometryBasics
 
 Makie.plottype(::TrajectoryGamesBase.PolygonEnvironment) = Makie.Poly
 
-function Makie.convert_arguments(::Type{<:Makie.Poly}, environment)
+function Makie.convert_arguments(
+    ::Type{<:Makie.Poly},
+    environment::TrajectoryGamesBase.PolygonEnvironment,
+)
     geometry = GeometryBasics.Polygon(GeometryBasics.Point{2}.(environment.set.vertices))
     (geometry,)
-end
-
-function TrajectoryGamesBase.visualize!(
-    canvas,
-    environment::TrajectoryGamesBase.PolygonEnvironment;
-    color = :lightgray,
-    kwargs...,
-)
-    Makie.poly!(canvas, environment; color, kwargs...)
-end
-
-function TrajectoryGamesBase.visualize!(
-    canvas,
-    strategy::Makie.Observable{<:TrajectoryGamesBase.JointStrategy};
-    colors = range(colorant"red", colorant"blue", length = length(strategy[].substrategies)),
-    weight_offset = 0.0,
-)
-    for player_i in 1:length(strategy[].substrategies)
-        color = colors[player_i]
-        γ = Makie.@lift $strategy.substrategies[player_i]
-        TrajectoryGamesBase.visualize!(canvas, γ; color, weight_offset)
-    end
 end
 
 @recipe(OpenLoopStrategyViz) do scene

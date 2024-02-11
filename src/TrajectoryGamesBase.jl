@@ -8,9 +8,6 @@ using LazySets: LazySets
 using GeometryBasics: GeometryBasics
 using Polyhedra: Polyhedra
 
-include("visualize.jl")
-export visualize!
-
 include("dynamics.jl")
 export AbstractTemporalStructureTrait,
     control_bounds,
