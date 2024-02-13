@@ -18,7 +18,7 @@ SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 Makie = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
 
 [extensions]
-MakieVizExt = "Makie"
+MakieExt = "Makie"
 
 [compat]
 BlockArrays = "0.16"

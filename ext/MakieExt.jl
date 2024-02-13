@@ -1,4 +1,4 @@
-module MakieVizExt
+module MakieExt
 using TrajectoryGamesBase: TrajectoryGamesBase
 using Makie: Makie, @recipe
 using Colors: @colorant_str
