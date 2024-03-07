@@ -14,19 +14,17 @@ Base.@kwdef struct LinearDynamics{TA,TB,TSB,TCB} <: AbstractDynamics
     control_bounds::TCB = (; lb = fill(-Inf, size(first(B), 2)), ub = fill(Inf, size(first(B), 2)))
 end
 
-function LinearDynamics(dynamics::ProductDynamics{<:AbstractVector{<:LinearDynamics}})
-    (; A, B) = _block_diagonalize(
-        temporal_structure_trait(dynamics),
-        dynamics.subsystems,
-        horizon(dynamics),
-    )
+function LinearDynamics(
+    dynamics::ProductDynamics{<:AbstractVector{<:LinearDynamics{<:Fill,<:Fill}}},
+)
+    (; A, B) = _block_diagonalize(dynamics.subsystems, horizon(dynamics))
     sb = state_bounds(dynamics)
     cb = control_bounds(dynamics)
 
     LinearDynamics(; A, B, state_bounds = sb, control_bounds = cb)
 end
 
-function _block_diagonalize(::TimeInvariant, linear_subsystems, horizon)
+function _block_diagonalize(linear_subsystems, horizon)
     A = Fill(blockdiag([sparse(sub.A.value) for sub in linear_subsystems]...), horizon)
 
     B = let
@@ -39,14 +37,6 @@ function _block_diagonalize(::TimeInvariant, linear_subsystems, horizon)
     (; A, B)
 end
 
-function TrajectoryGamesBase.temporal_structure_trait(::LinearDynamics{<:Fill,<:Fill})
-    TimeInvariant()
-end
-
-function TrajectoryGamesBase.temporal_structure_trait(::LinearDynamics)
-    TimeVarying()
-end
-
 function time_invariant_linear_dynamics(; A, B, horizon = ∞, bounds...)
     LinearDynamics(; A = Fill(A, horizon), B = Fill(B, horizon), bounds...)
 end
@@ -55,9 +45,7 @@ function (sys::LinearDynamics)(x, u, t::Int, ::Any = nothing)
     sys.A[t] * x + sys.B[t] * u
 end
 
-function (sys::LinearDynamics)(x, u, ::Nothing = nothing, ::Any = nothing)
-    temporal_structure_trait(sys) isa TimeInvariant ||
-        error("Only time-invariant systems can ommit the `t` argument.")
+function (sys::LinearDynamics{<:Fill,<:Fill})(x, u, ::Nothing = nothing, ::Any = nothing)
     sys.A.value * x + sys.B.value * u
 end
 

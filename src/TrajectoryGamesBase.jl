@@ -9,18 +9,7 @@ using GeometryBasics: GeometryBasics
 using Polyhedra: Polyhedra
 
 include("dynamics.jl")
-export AbstractTemporalStructureTrait,
-    control_bounds,
-    control_dim,
-    get_constraints_from_box_bounds,
-    horizon,
-    num_players,
-    rollout,
-    state_bounds,
-    state_dim,
-    temporal_structure_trait,
-    TimeInvariant,
-    TimeVarying
+export control_bounds, control_dim, get_constraints_from_box_bounds, horizon, num_players, rollout, state_bounds, state_dim
 
 include("product_dynamics.jl")
 export ProductDynamics

@@ -114,9 +114,6 @@ end # Mock module
                 @test control_dim(linear_dynamics) == control_dim(game.dynamics) == 4
                 @test control_dim(linear_dynamics, 1) == control_dim(game.dynamics, 1) == 2
                 @test num_players(linear_dynamics) == num_players(game.dynamics) == 2
-                @test temporal_structure_trait(linear_dynamics) ==
-                      temporal_structure_trait(game.dynamics) ==
-                      TimeInvariant()
             end
 
             @testset "cost" begin

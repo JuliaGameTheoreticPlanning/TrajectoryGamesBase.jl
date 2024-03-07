@@ -69,10 +69,3 @@ end
 function horizon(dynamics::ProductDynamics)
     horizon(first(dynamics.subsystems))
 end
-
-function temporal_structure_trait(dynamics::ProductDynamics)
-    if all(sub -> temporal_structure_trait(sub) isa TimeInvariant, dynamics.subsystems)
-        return TimeInvariant()
-    end
-    TimeVarying()
-end
