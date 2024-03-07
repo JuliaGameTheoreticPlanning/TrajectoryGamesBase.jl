@@ -20,8 +20,8 @@ A generic cost representation for a `TrajectoryGame`.
 """
 struct TrajectoryGameCost{T1,T2}
     """
-    A function `(xs, us, context) -> cs` that maps a sequence of states `xs` and inputs `us`
-    and `context` information to a tuple of scalar costs per player.
+    A function `(xs, us, parameters) -> cs` that maps a sequence of states `xs` and inputs `us`
+    and `parameters` to a tuple of scalar costs per player.
     """
     _f::T1
     """
@@ -35,8 +35,8 @@ cost_structure_trait(c::TrajectoryGameCost) = c.structure
 
 struct TimeSeparableTrajectoryGameCost{T1,T2,T3}
     """
-    A function `(x, u, t, context_state) -> sc` which maps the joint state `x` and input `u` for a
-    given time step and surrounding context information `t` to a tuple of scalar costs `sc` for each
+    A function `(x, u, t, parameters) -> sc` which maps the joint state `x` and input `u` for a
+    given time step and parameter vector `parameters` to a tuple of scalar costs `sc`, one for each
     player *at that time*.
     """
     stage_cost::T1
@@ -55,10 +55,10 @@ struct TimeSeparableTrajectoryGameCost{T1,T2,T3}
     discount_factor::Float64
 end
 
-function (c::TimeSeparableTrajectoryGameCost)(xs, us, context)
+function (c::TimeSeparableTrajectoryGameCost)(xs, us, parameters)
     ts = Iterators.eachindex(xs)
     Iterators.map(xs, us, ts) do x, u, t
-        c.discount_factor^(t - 1) .* c.stage_cost(x, u, t, context)
+        c.discount_factor^(t - 1) .* c.stage_cost(x, u, t, parameters)
     end |> c.reducer
 end
 

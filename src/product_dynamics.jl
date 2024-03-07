@@ -16,10 +16,10 @@ function (dynamics::ProductDynamics)(
     x::AbstractBlockArray,
     u::AbstractBlockArray,
     t = nothing,
-    context = nothing,
+    parameters = nothing,
 )
     mortar([
-        sub(x̂, u, t, context) for (sub, x̂, u) in zip(dynamics.subsystems, blocks(x), blocks(u))
+        sub(x̂, u, t, parameters) for (sub, x̂, u) in zip(dynamics.subsystems, blocks(x), blocks(u))
     ])
 end
 

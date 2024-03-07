@@ -1,5 +1,5 @@
 """
-    solve_trajectory_game!(solver, game, initial_state; context, kwargs...)
+    solve_trajectory_game!(solver, game, initial_state; parameters, kwargs...)
 
 Computes a joint strategy `γ` for all players for the given `game` for game-play starting at
 `initial_state`. This call may modify the `solver` itself; e.g., due to learning of parameters,
