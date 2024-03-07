@@ -129,7 +129,7 @@ end # Mock module
             end
 
             @testset "environment" begin
-                constraints = get_constraints(game.env)
+                constraints = get_constraints(game.environment)
                 # probe a feasible state
                 @test all(constraints(zeros(4), parameters) .> 0)
                 # probe an infeasible state
