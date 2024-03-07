@@ -12,8 +12,15 @@ Base.@kwdef struct ProductDynamics{T} <: AbstractDynamics
     end
 end
 
-function (dynamics::ProductDynamics)(x::AbstractBlockArray, u::AbstractBlockArray, t = nothing)
-    mortar([sub(x̂, u, t) for (sub, x̂, u) in zip(dynamics.subsystems, blocks(x), blocks(u))])
+function (dynamics::ProductDynamics)(
+    x::AbstractBlockArray,
+    u::AbstractBlockArray,
+    t = nothing,
+    parameters = nothing,
+)
+    mortar([
+        sub(x̂, u, t, parameters) for (sub, x̂, u) in zip(dynamics.subsystems, blocks(x), blocks(u))
+    ])
 end
 
 function state_dim(dynamics::ProductDynamics)
@@ -61,11 +68,4 @@ end
 
 function horizon(dynamics::ProductDynamics)
     horizon(first(dynamics.subsystems))
-end
-
-function temporal_structure_trait(dynamics::ProductDynamics)
-    if all(sub -> temporal_structure_trait(sub) isa TimeInvariant, dynamics.subsystems)
-        return TimeInvariant()
-    end
-    TimeVarying()
 end

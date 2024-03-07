@@ -4,7 +4,7 @@ using BlockArrays: Block, eachblock, mortar, blocklength
 using LinearAlgebra: norm, norm_sqr
 using Makie: Makie
 
-function setup_tag_examples(; Δt=0.1)
+function setup_tag_examples(; Δt = 0.1)
     dynamics = let
         A = [
             1 0 Δt 0
@@ -32,7 +32,7 @@ function setup_tag_examples(; Δt=0.1)
     end
 
     # construct a cost function with an additional hint on the cost structure
-    generic_cost = TrajectoryGameCost(ZeroSumCostStructure()) do xs, us, context
+    generic_cost = TrajectoryGameCost(ZeroSumCostStructure()) do xs, us, parameters
         # cost from the perspective of player 1: minimize the distance to the evader (p2) and
         # minimize their own control effort
         c1 = sum(xu -> stage_cost_p1(xu...), zip(xs, us))
@@ -49,17 +49,17 @@ function setup_tag_examples(; Δt=0.1)
             cs -> reduce(.+, cs),
             ZeroSumCostStructure(),
             discount_factor,
-        ) do x, u, t, context
+        ) do x, u, t, parameters
             c1 = stage_cost_p1(x, u)
             c2 = -c1
             (c1, c2)
         end
     end
 
-    env = PolygonEnvironment()
+    environment = PolygonEnvironment()
 
-    generic_game = TrajectoryGame(; dynamics, cost=generic_cost, env)
-    time_separable_game = TrajectoryGame(; dynamics, cost=time_separable_cost, env)
+    generic_game = TrajectoryGame(; dynamics, cost = generic_cost, environment)
+    time_separable_game = TrajectoryGame(; dynamics, cost = time_separable_cost, environment)
 
     (; generic_game, time_separable_game)
 end
@@ -80,7 +80,8 @@ function TrajectoryGamesBase.solve_trajectory_game!(
     solver,
     game,
     initial_state;
-    initial_guess=nothing
+    parameters = nothing,
+    initial_guess = nothing,
 )
     @test !isnothing(initial_guess)
     TrajectoryGamesBase.JointStrategy([trivial_strategy, trivial_strategy])
@@ -96,7 +97,7 @@ end # Mock module
             trivial_joint_strategy = JointStrategy([Mock.trivial_strategy, Mock.trivial_strategy])
             x1 = mortar([[1.0, 0, 0, 0], [-1.0, 0, 0, 0]])
             horizon = 20
-            context = nothing
+            parameters = nothing
 
             local trivial_steps
 
@@ -113,15 +114,12 @@ end # Mock module
                 @test control_dim(linear_dynamics) == control_dim(game.dynamics) == 4
                 @test control_dim(linear_dynamics, 1) == control_dim(game.dynamics, 1) == 2
                 @test num_players(linear_dynamics) == num_players(game.dynamics) == 2
-                @test temporal_structure_trait(linear_dynamics) ==
-                      temporal_structure_trait(game.dynamics) ==
-                      TimeInvariant()
             end
 
             @testset "cost" begin
                 @test cost_structure_trait(game.cost) isa ZeroSumCostStructure
 
-                total_costs = game.cost(trivial_steps.xs, trivial_steps.us, context)
+                total_costs = game.cost(trivial_steps.xs, trivial_steps.us, parameters)
                 @test total_costs[1] > 0
                 @test total_costs[1] == -total_costs[2]
                 if !isnothing(last_total_costs)
@@ -131,19 +129,19 @@ end # Mock module
             end
 
             @testset "environment" begin
-                constraints = get_constraints(game.env)
+                constraints = get_constraints(game.environment)
                 # probe a feasible state
-                @test all(constraints(zeros(4)) .> 0)
+                @test all(constraints(zeros(4), parameters) .> 0)
                 # probe an infeasible state
-                @test any(constraints(fill(10, 4)) .< 0)
+                @test any(constraints(fill(10, 4), parameters) .< 0)
             end
 
             @testset "receding horizon utils" begin
                 receding_horizon_strategy = TrajectoryGamesBase.RecedingHorizonStrategy(;
-                    solver=Mock.Solver(),
+                    solver = Mock.Solver(),
                     game,
-                    turn_length=2,
-                    generate_initial_guess=(last_strategy, state, time) -> :foo
+                    turn_length = 2,
+                    generate_initial_guess = (last_strategy, state, time) -> :foo,
                 )
                 receding_steps = rollout(game.dynamics, receding_horizon_strategy, x1, horizon)
                 receding_steps_skipped = rollout(
@@ -151,11 +149,11 @@ end # Mock module
                     receding_horizon_strategy,
                     x1,
                     horizon;
-                    skip_last_strategy_call=true
+                    skip_last_strategy_call = true,
                 )
                 @test receding_steps == trivial_steps
                 @test receding_steps_skipped.xs == trivial_steps.xs
-                @test receding_steps_skipped.us == trivial_steps.us[1:(end-1)]
+                @test receding_steps_skipped.us == trivial_steps.us[1:(end - 1)]
             end
         end
     end
@@ -215,11 +213,7 @@ end # Mock module
 
         @testset "flatten and unflatten trajectory" begin
             flat_trajectory = [1:60;]
-            unflattened_trajectory = TrajectoryGamesBase.unflatten_trajectory(
-                flat_trajectory,
-                4,
-                2
-            )
+            unflattened_trajectory = TrajectoryGamesBase.unflatten_trajectory(flat_trajectory, 4, 2)
 
             @test length(unflattened_trajectory.xs) == 10
             @test length(unflattened_trajectory.us) == 10

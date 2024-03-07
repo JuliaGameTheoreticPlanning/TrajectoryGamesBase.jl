@@ -30,7 +30,7 @@ end
 
 function get_constraints(environment::PolygonEnvironment, player_index = nothing)
     constraints = LazySets.constraints_list(environment.set)
-    function (state)
+    function (state, ::Any = nothing)
         positions = (substate[1:2] for substate in blocks(state))
         mapreduce(vcat, Iterators.product(constraints, positions)) do (constraint, position)
             -constraint.a' * position + constraint.b

@@ -8,22 +8,15 @@ using LazySets: LazySets
 using GeometryBasics: GeometryBasics
 using Polyhedra: Polyhedra
 
-include("visualize.jl")
-export visualize!
-
 include("dynamics.jl")
-export AbstractTemporalStructureTrait,
-    control_bounds,
+export control_bounds,
     control_dim,
     get_constraints_from_box_bounds,
     horizon,
     num_players,
     rollout,
     state_bounds,
-    state_dim,
-    temporal_structure_trait,
-    TimeInvariant,
-    TimeVarying
+    state_dim
 
 include("product_dynamics.jl")
 export ProductDynamics
@@ -65,7 +58,7 @@ export to_blockvector,
     unflatten_trajectory
 
 if !isdefined(Base, :get_extension)
-    include("../ext/MakieVizExt.jl")
+    include("../ext/MakieExt.jl")
 end
 
 end
