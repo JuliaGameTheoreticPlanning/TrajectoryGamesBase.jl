@@ -8,6 +8,15 @@ A package that contains the problem interface and related types for trajectory g
 
 Note that this package does not contain any solver code. It merely serves as abstraction to share problem description and solvers.
 
+## Eco-System
+
+- [MCPTrajectoryGameSolver.jl](https://github.com/JuliaGameTheoreticPlanning/MCPTrajectoryGameSolver.jl): A solver for trajectory games by casting them as mixed complementarity problems. See that package for a complete usage demo of the `TrajectoryGamesBase` interface.
+- [TrajectoryGamesExamples.jl](https://github.com/lassepe/TrajectoryGamesExamples.jl): A package that provides examples of trajectory games and tools for modeling and visualization.
+- [LiftedTrajectoryGames.jl](https://github.com/lassepe/LiftedTrajectoryGames.jl): A package for learning mixed strategy solutions of trajectory games.
+
+If you have a package that uses `TrajectoryGamesBase` and would like to have it listed here, please open an issue or a pull request.
+
 ## Usage
 
-This README will be expanded to include more concrete usage instructions. Until then, please refer to the `test/runtests.jl` file as a source of implicit documentation.
+This README will be expanded to include more concrete usage instructions. Until then, please refer to the `test/runtests.jl` file as a source of implicit documentation as well as
+[this demo](https://github.com/JuliaGameTheoreticPlanning/MCPTrajectoryGameSolver.jl/blob/main/test/Demo.jl) from [MCPTrajectoryGameSolver.jl](https://github.com/JuliaGameTheoreticPlanning/MCPTrajectoryGameSolver.jl).
