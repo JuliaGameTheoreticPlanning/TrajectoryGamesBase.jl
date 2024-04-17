@@ -43,6 +43,7 @@ end
         visible = true,
         scale_factor = 1.0,
         extra_attributes = nothing,
+        dimensionality = 2,
     )
 end
 
@@ -54,10 +55,14 @@ function Makie.plot!(viz::OpenLoopStrategyViz{<:Tuple{TrajectoryGamesBase.OpenLo
         begin
             starttime = something($(viz.starttime), firstindex($strategy.xs))
             endtime = something($(viz.endtime), lastindex($strategy.xs))
-            [
-                Makie.Point2f(xi[1], xi[2]) for
-                xi in $strategy.xs[starttime:($(viz.position_subsampling)):endtime]
-            ]
+            subsampled_states = $strategy.xs[starttime:($(viz.position_subsampling)):endtime]
+            if $(viz.dimensionality) == 2
+                [Makie.Point2f(xi[2], xi[1]) for xi in subsampled_states]
+            elseif $(viz.dimensionality) == 3
+                [Makie.Point3f(xi[1], xi[2], xi[3]) for xi in subsampled_states]
+            else
+                throw(ArgumentError("Unsupported vizualisation dimensionality: $(viz.dimensionality)"))
+            end
         end
     )
     if isnothing(viz.extra_attributes[])
