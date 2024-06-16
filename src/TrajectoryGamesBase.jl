@@ -65,7 +65,7 @@ export to_blockvector,
     unflatten_trajectory
 
 if !isdefined(Base, :get_extension)
-    include("../ext/MakieVizExt.jl")
+    include("../ext/MakieExt.jl")
 end
 
 end
