@@ -1,4 +1,4 @@
-module MakieVizExt
+module MakieExt
 using TrajectoryGamesBase: TrajectoryGamesBase
 using Makie: Makie, @recipe
 using Colors: @colorant_str
@@ -6,7 +6,10 @@ using GeometryBasics: GeometryBasics
 
 Makie.plottype(::TrajectoryGamesBase.PolygonEnvironment) = Makie.Poly
 
-function Makie.convert_arguments(::Type{<:Makie.Poly}, environment)
+function Makie.convert_arguments(
+    ::Type{<:Makie.Poly},
+    environment::TrajectoryGamesBase.PolygonEnvironment,
+)
     geometry = GeometryBasics.Polygon(GeometryBasics.Point{2}.(environment.set.vertices))
     (geometry,)
 end
