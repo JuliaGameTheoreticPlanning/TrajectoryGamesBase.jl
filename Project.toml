@@ -21,7 +21,7 @@ Makie = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
 MakieExt = "Makie"
 
 [compat]
-BlockArrays = "0.16"
+BlockArrays = "0.16,1"
 Colors = "0.12"
 GeometryBasics = "0.4.2"
 InfiniteArrays = "0.12, 0.13, 0.14"
