@@ -52,13 +52,17 @@ function time_invariant_linear_dynamics(; A, B, horizon = ∞, bounds...)
 end
 
 function (sys::LinearDynamics)(x, u, t::Int)
-    sys.A[t] * x + sys.B[t] * u
+    result = sys.A[t] * x + sys.B[t] * u
+    # BlockArrays v1 can return BlockedUnitRange axes instead of BlockedOneTo when mixing
+    # sparse/block matrix operations; normalize to BlockedOneTo for type consistency.
+    result isa AbstractBlockArray ? mortar(blocks(result)) : result
 end
 
 function (sys::LinearDynamics)(x, u, ::Nothing = nothing)
     temporal_structure_trait(sys) isa TimeInvariant ||
         error("Only time-invariant systems can ommit the `t` argument.")
-    sys.A.value * x + sys.B.value * u
+    result = sys.A.value * x + sys.B.value * u
+    result isa AbstractBlockArray ? mortar(blocks(result)) : result
 end
 
 function state_dim(sys::LinearDynamics)
